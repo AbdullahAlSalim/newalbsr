@@ -5,27 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام إدارة صيانة نيوال</title>
     <style>
-        :root { --primary: #1B365D; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f7f6; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        :root {
+            --primary: #1B365D;
+            --secondary: #F2F5F8;
+            --text: #333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
         .form-group { display: flex; flex-direction: column; }
         label { font-weight: bold; margin-bottom: 5px; color: var(--primary); }
-        input, select { padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        input, select { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; }
         .full-width { grid-column: span 2; }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .btn-primary { background-color: var(--primary); color: #fff; }
+        .btn-primary:hover { background-color: #122540; }
+        .btn-secondary { background-color: #27ae60; color: #fff; margin-right: 10px; }
+        .btn-export { background-color: #e67e22; color: #fff; margin-right: 10px; }
+        
         .actions { text-align: center; margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
-        button { padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin: 5px; }
-        .btn-print { background-color: var(--primary); color: #fff; }
-        .btn-pdf { background-color: #c0392b; color: #fff; }
-        .btn-save { background-color: #27ae60; color: #fff; }
 
+        /* Print Styles */
         @media print {
+            body { background: #fff; padding: 0; }
             .no-print { display: none; }
-            .print-area { display: block !important; width: 100%; }
-            .invoice-print { width: 100%; border-collapse: collapse; }
+            .print-area { display: block !important; }
+            
+            /* Invoice Print Style */
+            .invoice-print { width: 100%; border-collapse: collapse; margin-top: 20px; }
             .invoice-print th, .invoice-print td { border: 1px solid #000; padding: 10px; text-align: center; }
+            .invoice-print th { background-color: #eee !important; -webkit-print-color-adjust: exact; }
             .invoice-header { text-align: center; margin-bottom: 20px; }
+            .invoice-header h2 { margin: 0; color: var(--primary); }
+            .terms { margin-top: 30px; font-size: 14px; }
+            
+            /* Tag Print Style */
+            .tag-print {
+                width: 8cm;
+                border: 2px solid #000;
+                padding: 10px;
+                margin: 0 auto;
+                font-size: 14px;
+            }
+            .tag-print-header { background-color: #000 !important; color: #fff !important; text-align: center; padding: 5px; font-weight: bold; -webkit-print-color-adjust: exact; }
+            .tag-print table { width: 100%; margin-top: 10px; border-collapse: collapse; }
+            .tag-print table td { padding: 5px; border-bottom: 1px dashed #ccc; }
+            .tag-print table td:first-child { font-weight: bold; width: 45%; }
         }
         .print-area { display: none; }
     </style>
@@ -33,64 +90,202 @@
 <body>
 
 <div class="container no-print">
-    <h1>نظام صيانة نيوال</h1>
+    <h1>نظام الصيانة - مركز نيوال (البصرة)</h1>
+    
     <div class="form-grid">
-        <div class="form-group"><label>رقم الفاتورة:</label><input type="text" id="refNo" value="1001"></div>
-        <div class="form-group"><label>تاريخ التسجيل:</label><input type="date" id="dateReg"></div>
-        <div class="form-group"><label>اسم الزبون:</label><input type="text" id="custName"></div>
-        <div class="form-group"><label>رقم الهاتف:</label><input type="text" id="phone"></div>
-        <div class="form-group full-width"><label>حالة الضمان:</label>
-            <select id="status"><option value="ضمان">ضمان</option><option value="خارج الضمان">خارج الضمان</option></select>
+        <div class="form-group">
+            <label>رقم الفاتورة (Ref No):</label>
+            <input type="text" id="refNo" value="1001">
         </div>
-        <div class="form-group full-width"><label>الموديل:</label><input type="text" id="modelNo"></div>
-        <div class="form-group full-width"><label>رقم السيريال:</label><input type="text" id="serialNo"></div>
+        <div class="form-group">
+            <label>تاريخ تسجيل الخدمة:</label>
+            <input type="date" id="dateReg">
+        </div>
+        <div class="form-group">
+            <label>اسم الزبون / الوكيل:</label>
+            <input type="text" id="custName" placeholder="أدخل اسم الزبون">
+        </div>
+        <div class="form-group">
+            <label>رقم الهاتف:</label>
+            <input type="text" id="phone" placeholder="077xxxxxxx">
+        </div>
+        <div class="form-group">
+            <label>اسم الفني:</label>
+            <input type="text" id="techName" placeholder="أدخل اسم الفني">
+        </div>
+        <div class="form-group">
+            <label>حالة الجهاز:</label>
+            <select id="status">
+                <option value="تحت الفحص">تحت الفحص</option>
+                <option value="قيد الصيانة">قيد الصيانة</option>
+                <option value="تم الإصلاح">تم الإصلاح</option>
+            </select>
+        </div>
+        <div class="form-group full-width">
+            <label>كود المنتج / رقم الموديل:</label>
+            <input type="text" id="modelNo" placeholder="Zio-Exclusive ...">
+        </div>
+        <div class="form-group full-width">
+            <label>رقم السيريال (Serial No):</label>
+            <input type="text" id="serialNo" placeholder="SN-123456">
+        </div>
     </div>
+
     <div class="actions">
-        <button class="btn-print" onclick="window.print()">طباعة الفاتورة 🖨️</button>
-        <button class="btn-pdf" onclick="window.print()">حفظ كـ PDF 💾</button>
-        <button class="btn-save" onclick="saveData()">حفظ السجل (CSV) 📊</button>
+        <button class="btn-primary" onclick="printDocument('invoice')">طباعة الفاتورة 📄</button>
+        <button class="btn-secondary" onclick="printDocument('tag')">طباعة بطاقة الخدمة 🏷️</button>
+        <button class="btn-export" onclick="saveAndExport()">حفظ وتصدير السجل (CSV) 💾</button>
     </div>
 </div>
 
 <div id="invoiceTemplate" class="print-area">
     <div class="invoice-header">
-        <h2>مركز صيانة نيوال (البصرة)</h2>
+        <h2>مركز صيانة نيوال</h2>
         <p>NEWAL SERVICE CENTER - EXCLUSIVE</p>
+        <p>البصرة - شارع الوطن | 07734855588 | service.basra@newal.com</p>
     </div>
+    
     <table class="invoice-print">
-        <tr><td><b>رقم الوصل:</b> <span id="p-ref"></span></td><td><b>التاريخ:</b> <span id="p-date"></span></td></tr>
-        <tr><td><b>اسم الزبون:</b> <span id="p-name"></span></td><td><b>رقم الهاتف:</b> <span id="p-phone"></span></td></tr>
-        <tr><td><b>الموديل:</b> <span id="p-model"></span></td><td><b>السيريال:</b> <span id="p-serial"></span></td></tr>
-        <tr><td colspan="2"><b>حالة الضمان:</b> <span id="p-status"></span></td></tr>
+        <tr>
+            <td style="text-align:right;"><b>رقم الوصل:</b> <span id="p-ref"></span></td>
+            <td style="text-align:right;"><b>التاريخ:</b> <span id="p-date"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align:right;"><b>اسم الزبون:</b> <span id="p-name"></span></td>
+            <td style="text-align:right;"><b>رقم الهاتف:</b> <span id="p-phone"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align:right;" colspan="2"><b>اسم الفني:</b> <span id="p-tech"></span></td>
+        </tr>
     </table>
-    <br>
-    <div style="text-align: center;">_________________________<br>توقيع مسؤول الورشة</div>
+
+    <table class="invoice-print">
+        <thead>
+            <tr>
+                <th>كود المنتج / الموديل</th>
+                <th>رقم السيريال</th>
+                <th>حالة الجهاز</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="p-model"></td>
+                <td id="p-serial"></td>
+                <td id="p-status"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="terms">
+        <b>الشروط والأحكام:</b>
+        <ul>
+            <li>الشركة لن تسلم اي منتج الا بوجود الوصل الورقي.</li>
+            <li>يسقط الضمان اذا تم فتح المنتج خارج الورشة المركزية او احد الورش المعتمدة.</li>
+            <li>مدة الضمان سنة واحدة لا يشمل حالات الكسر او سوء الاستخدام.</li>
+            <li>يسقط الحق باستلام المنتج بعد مرور اسبوعين على اكمال صيانته.</li>
+        </ul>
+        <br><br>
+        <div style="display: flex; justify-content: space-between;">
+            <div>توقيع مسؤول الورشة:<br><br>_________________</div>
+            <div>توقيع الزبون المستلم:<br><br>_________________</div>
+        </div>
+    </div>
+</div>
+
+<div id="tagTemplate" class="print-area">
+    <div class="tag-print">
+        <div class="tag-print-header">
+            newal Zio EXCLUSIVE<br>
+            <span style="font-size:10px; font-style:italic; font-weight:normal;">Make your life better...</span>
+        </div>
+        <table>
+            <tr><td>Service Reg No:</td><td id="t-ref"></td></tr>
+            <tr><td>Customer Name:</td><td id="t-name"></td></tr>
+            <tr><td>Model No:</td><td id="t-model"></td></tr>
+            <tr><td>Serial No:</td><td id="t-serial"></td></tr>
+            <tr><td>Service Reg Date:</td><td id="t-date"></td></tr>
+            <tr><td>Technician Name:</td><td id="t-tech"></td></tr>
+        </table>
+    </div>
 </div>
 
 <script>
+    // تعيين تاريخ اليوم تلقائياً
     document.getElementById('dateReg').valueAsDate = new Date();
-    
-    function updatePrint() {
+
+    function populateData() {
+        // تحديث الفاتورة
         document.getElementById('p-ref').innerText = document.getElementById('refNo').value;
         document.getElementById('p-date').innerText = document.getElementById('dateReg').value;
         document.getElementById('p-name').innerText = document.getElementById('custName').value;
         document.getElementById('p-phone').innerText = document.getElementById('phone').value;
+        document.getElementById('p-tech').innerText = document.getElementById('techName').value;
         document.getElementById('p-model').innerText = document.getElementById('modelNo').value;
         document.getElementById('p-serial').innerText = document.getElementById('serialNo').value;
         document.getElementById('p-status').innerText = document.getElementById('status').value;
+
+        // تحديث بطاقة الخدمة
+        document.getElementById('t-ref').innerText = document.getElementById('refNo').value;
+        document.getElementById('t-name').innerText = document.getElementById('custName').value;
+        document.getElementById('t-model').innerText = document.getElementById('modelNo').value;
+        document.getElementById('t-serial').innerText = document.getElementById('serialNo').value;
+        document.getElementById('t-date').innerText = document.getElementById('dateReg').value;
+        document.getElementById('t-tech').innerText = document.getElementById('techName').value;
     }
 
-    // تحديث تلقائي عند الطباعة
-    window.onbeforeprint = updatePrint;
+    function printDocument(type) {
+        populateData();
+        
+        // إخفاء كل قوالب الطباعة أولاً
+        document.getElementById('invoiceTemplate').style.display = 'none';
+        document.getElementById('tagTemplate').style.display = 'none';
 
-    function saveData() {
-        let data = [document.getElementById('refNo').value, document.getElementById('custName').value, document.getElementById('status').value];
-        let csvContent = "data:text/csv;charset=utf-8,\uFEFFرقم الفاتورة,الزبون,الحالة\n" + data.join(",");
-        let link = document.createElement("a");
-        link.href = encodeURI(csvContent);
-        link.download = "سجل_" + document.getElementById('refNo').value + ".csv";
+        // إظهار القالب المطلوب فقط
+        if(type === 'invoice') {
+            document.getElementById('invoiceTemplate').style.display = 'block';
+        } else if (type === 'tag') {
+            document.getElementById('tagTemplate').style.display = 'block';
+        }
+
+        window.print();
+        
+        // إعادة الإخفاء بعد الطباعة
+        document.getElementById('invoiceTemplate').style.display = 'none';
+        document.getElementById('tagTemplate').style.display = 'none';
+    }
+
+    function saveAndExport() {
+        // جمع البيانات
+        let record = [
+            document.getElementById('refNo').value,
+            document.getElementById('dateReg').value,
+            document.getElementById('custName').value,
+            document.getElementById('phone').value,
+            document.getElementById('modelNo').value,
+            document.getElementById('serialNo').value,
+            document.getElementById('status').value
+        ];
+
+        // تحويل إلى CSV
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // لدعم اللغة العربية
+        csvContent += "رقم الفاتورة,التاريخ,اسم الزبون,رقم الهاتف,الموديل,السيريال,الحالة\n";
+        csvContent += record.join(",") + "\n";
+
+        // تحميل الملف
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "سجل_صيانة_" + document.getElementById('refNo').value + ".csv");
+        document.body.appendChild(link);
         link.click();
+        
+        // زيادة رقم الفاتورة تلقائياً للاستخدام القادم
+        let currentRef = parseInt(document.getElementById('refNo').value);
+        if(!isNaN(currentRef)) document.getElementById('refNo').value = currentRef + 1;
+        
+        alert("تم التصدير بنجاح!");
     }
 </script>
+
 </body>
 </html>
