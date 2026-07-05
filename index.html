@@ -42,6 +42,19 @@
             border-bottom: 2px solid var(--primary);
             padding-bottom: 10px;
             font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        .logo-box {
+            text-align: center;
+            margin: 15px 0 25px 0;
+        }
+
+        .logo-box img {
+            max-width: 180px;
+            width: 100%;
+            height: auto;
+            display: inline-block;
         }
 
         .form-grid {
@@ -133,6 +146,17 @@
             margin-bottom: 20px;
         }
 
+        .invoice-logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .invoice-logo img {
+            max-width: 150px;
+            width: 100%;
+            height: auto;
+        }
+
         .invoice-header h2 {
             margin: 0;
             color: var(--primary);
@@ -219,6 +243,10 @@
                 font-size: 21px;
             }
 
+            .logo-box img {
+                max-width: 150px;
+            }
+
             .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -253,6 +281,10 @@
         @media (max-width: 480px) {
             h1 {
                 font-size: 18px;
+            }
+
+            .logo-box img {
+                max-width: 130px;
             }
 
             input,
@@ -355,6 +387,10 @@
 <div class="container no-print">
     <h1>نظام الصيانة - مركز نيوال (البصرة)</h1>
 
+    <div class="logo-box">
+        <img src="newal.jpg" alt="Newal Logo">
+    </div>
+
     <div class="form-grid">
 
         <div class="form-group">
@@ -407,6 +443,11 @@
 
 <div id="invoiceTemplate" class="print-area">
     <div class="invoice-header">
+
+        <div class="invoice-logo">
+            <img src="newal.jpg" alt="Newal Logo">
+        </div>
+
         <h2>مركز صيانة نيوال</h2>
         <p>NEWAL SERVICE CENTER</p>
         <p>البصرة - شارع الوطن | 07734855588 | service.basra@newal.com</p>
