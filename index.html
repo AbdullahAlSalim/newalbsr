@@ -206,7 +206,6 @@
             width: 45%;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -272,7 +271,6 @@
             }
         }
 
-        /* Print Styles */
         @media print {
             body {
                 background: #fff;
@@ -407,7 +405,6 @@
     </div>
 </div>
 
-<!-- Invoice Template -->
 <div id="invoiceTemplate" class="print-area">
     <div class="invoice-header">
         <h2>مركز صيانة نيوال</h2>
@@ -485,7 +482,6 @@
     </div>
 </div>
 
-<!-- Service Tag Template -->
 <div id="tagTemplate" class="print-area">
     <div class="tag-print">
         <div class="tag-print-header">
@@ -530,11 +526,9 @@
     </div>
 </div>
 
-<!-- PDF Library -->
 https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.jsscript>
 
 <script>
-    // تعيين تاريخ اليوم تلقائياً
     document.getElementById('dateReg').valueAsDate = new Date();
 
     function populateData() {
@@ -546,7 +540,6 @@ https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js
         const serialNo = document.getElementById('serialNo').value;
         const warranty = document.getElementById('warranty').value;
 
-        // تحديث الفاتورة
         document.getElementById('p-ref').innerText = refNo;
         document.getElementById('p-date').innerText = dateReg;
         document.getElementById('p-name').innerText = custName;
@@ -555,7 +548,6 @@ https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js
         document.getElementById('p-serial').innerText = serialNo;
         document.getElementById('p-warranty').innerText = warranty;
 
-        // تحديث بطاقة الخدمة
         document.getElementById('t-ref').innerText = refNo;
         document.getElementById('t-name').innerText = custName;
         document.getElementById('t-model').innerText = modelNo;
@@ -690,7 +682,6 @@ https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
 
-        // زيادة رقم الفاتورة تلقائياً للاستخدام القادم
         const currentRef = parseInt(refNo);
 
         if (!isNaN(currentRef)) {
