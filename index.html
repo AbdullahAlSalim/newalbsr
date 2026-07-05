@@ -138,22 +138,21 @@
             color: var(--primary);
         }
 
+        .invoice-header p {
+            margin: 5px 0;
+        }
+
         .invoice-print {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
 
-        .invoice-print th,
         .invoice-print td {
             border: 1px solid #000;
             padding: 10px;
             text-align: right;
             vertical-align: middle;
-        }
-
-        .invoice-print th {
-            background-color: #eee;
         }
 
         .terms {
@@ -263,7 +262,6 @@
                 font-size: 14px;
             }
 
-            .invoice-print th,
             .invoice-print td {
                 font-size: 13px;
                 padding: 7px;
@@ -287,7 +285,6 @@
             }
 
             .print-area {
-                display: block;
                 padding: 0;
             }
 
@@ -297,17 +294,10 @@
                 margin-top: 20px;
             }
 
-            .invoice-print th,
             .invoice-print td {
                 border: 1px solid #000;
                 padding: 10px;
                 text-align: right;
-            }
-
-            .invoice-print th {
-                background-color: #eee !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
             }
 
             .invoice-header {
@@ -540,7 +530,7 @@
     </div>
 </div>
 
-<!-- PDF Library -->
+<!-- PDF Library - السطر الصحيح -->
 https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.jsscript>
 
 <script>
@@ -624,6 +614,12 @@ https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js
                 orientation: 'portrait'
             }
         };
+
+        if (typeof html2pdf === 'undefined') {
+            alert('تعذر تحميل مكتبة PDF. تأكد من الاتصال بالإنترنت ثم حاول مرة أخرى.');
+            invoice.style.display = 'none';
+            return;
+        }
 
         html2pdf()
             .set(options)
