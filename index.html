@@ -109,16 +109,11 @@
             <label>رقم الهاتف:</label>
             <input type="text" id="phone" placeholder="077xxxxxxx">
         </div>
-        <div class="form-group">
-            <label>اسم الفني:</label>
-            <input type="text" id="techName" placeholder="أدخل اسم الفني">
-        </div>
-        <div class="form-group">
-            <label>حالة الجهاز:</label>
+        <div class="form-group full-width">
+            <label>حالة الجهاز (الضمان):</label>
             <select id="status">
-                <option value="تحت الفحص">تحت الفحص</option>
-                <option value="قيد الصيانة">قيد الصيانة</option>
-                <option value="تم الإصلاح">تم الإصلاح</option>
+                <option value="ضمان">ضمان</option>
+                <option value="خارج الضمان">خارج الضمان</option>
             </select>
         </div>
         <div class="form-group full-width">
@@ -138,6 +133,7 @@
     </div>
 </div>
 
+<!-- ================= AREA FOR PRINTING INVOICE ================= -->
 <div id="invoiceTemplate" class="print-area">
     <div class="invoice-header">
         <h2>مركز صيانة نيوال</h2>
@@ -154,9 +150,6 @@
             <td style="text-align:right;"><b>اسم الزبون:</b> <span id="p-name"></span></td>
             <td style="text-align:right;"><b>رقم الهاتف:</b> <span id="p-phone"></span></td>
         </tr>
-        <tr>
-            <td style="text-align:right;" colspan="2"><b>اسم الفني:</b> <span id="p-tech"></span></td>
-        </tr>
     </table>
 
     <table class="invoice-print">
@@ -164,7 +157,7 @@
             <tr>
                 <th>كود المنتج / الموديل</th>
                 <th>رقم السيريال</th>
-                <th>حالة الجهاز</th>
+                <th>حالة الضمان</th>
             </tr>
         </thead>
         <tbody>
@@ -192,6 +185,7 @@
     </div>
 </div>
 
+<!-- ================= AREA FOR PRINTING SERVICE TAG ================= -->
 <div id="tagTemplate" class="print-area">
     <div class="tag-print">
         <div class="tag-print-header">
@@ -204,7 +198,7 @@
             <tr><td>Model No:</td><td id="t-model"></td></tr>
             <tr><td>Serial No:</td><td id="t-serial"></td></tr>
             <tr><td>Service Reg Date:</td><td id="t-date"></td></tr>
-            <tr><td>Technician Name:</td><td id="t-tech"></td></tr>
+            <tr><td>Warranty:</td><td id="t-status"></td></tr>
         </table>
     </div>
 </div>
@@ -219,7 +213,6 @@
         document.getElementById('p-date').innerText = document.getElementById('dateReg').value;
         document.getElementById('p-name').innerText = document.getElementById('custName').value;
         document.getElementById('p-phone').innerText = document.getElementById('phone').value;
-        document.getElementById('p-tech').innerText = document.getElementById('techName').value;
         document.getElementById('p-model').innerText = document.getElementById('modelNo').value;
         document.getElementById('p-serial').innerText = document.getElementById('serialNo').value;
         document.getElementById('p-status').innerText = document.getElementById('status').value;
@@ -230,7 +223,7 @@
         document.getElementById('t-model').innerText = document.getElementById('modelNo').value;
         document.getElementById('t-serial').innerText = document.getElementById('serialNo').value;
         document.getElementById('t-date').innerText = document.getElementById('dateReg').value;
-        document.getElementById('t-tech').innerText = document.getElementById('techName').value;
+        document.getElementById('t-status').innerText = document.getElementById('status').value;
     }
 
     function printDocument(type) {
@@ -268,7 +261,7 @@
 
         // تحويل إلى CSV
         let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // لدعم اللغة العربية
-        csvContent += "رقم الفاتورة,التاريخ,اسم الزبون,رقم الهاتف,الموديل,السيريال,الحالة\n";
+        csvContent += "رقم الفاتورة,التاريخ,اسم الزبون,رقم الهاتف,الموديل,السيريال,حالة الضمان\n";
         csvContent += record.join(",") + "\n";
 
         // تحميل الملف
