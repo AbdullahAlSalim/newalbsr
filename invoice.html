@@ -47,11 +47,11 @@
 
         .logo-box {
             text-align: center;
-            margin: 15px 0 25px 0;
+            margin: 10px 0 20px 0;
         }
 
         .logo-box img {
-            max-width: 180px;
+            max-width: 120px;
             width: 100%;
             height: auto;
             display: inline-block;
@@ -138,63 +138,92 @@
         .print-area {
             display: none;
             background: #fff;
-            padding: 20px;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 12mm;
+            color: #000;
         }
 
         .invoice-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
 
         .invoice-logo {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .invoice-logo img {
-            max-width: 150px;
-            width: 100%;
+            max-width: 85px;
+            width: 85px;
             height: auto;
+            display: inline-block;
         }
 
         .invoice-header h2 {
-            margin: 0;
+            margin: 4px 0;
             color: var(--primary);
+            font-size: 22px;
         }
 
         .invoice-header p {
-            margin: 5px 0;
+            margin: 3px 0;
+            font-size: 13px;
         }
 
         .invoice-print {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 14px;
+            table-layout: fixed;
         }
 
         .invoice-print td {
             border: 1px solid #000;
-            padding: 10px;
+            padding: 9px;
             text-align: right;
             vertical-align: middle;
+            font-size: 14px;
+            line-height: 1.6;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        .invoice-print b {
+            color: #000;
+        }
+
+        .invoice-print span {
+            display: inline-block;
+            max-width: 100%;
+            word-break: break-word;
+            overflow-wrap: anywhere;
         }
 
         .terms {
-            margin-top: 30px;
-            font-size: 14px;
-            line-height: 1.8;
+            margin-top: 22px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .terms ul {
+            margin-top: 8px;
+            padding-right: 22px;
         }
 
         .signatures {
             display: flex;
             justify-content: space-between;
             gap: 30px;
-            margin-top: 35px;
+            margin-top: 28px;
         }
 
         .signature-box {
             width: 50%;
             text-align: center;
+            font-size: 13px;
         }
 
         .tag-print {
@@ -223,6 +252,7 @@
         .tag-print table td {
             padding: 5px;
             border-bottom: 1px dashed #ccc;
+            word-break: break-word;
         }
 
         .tag-print table td:first-child {
@@ -244,7 +274,7 @@
             }
 
             .logo-box img {
-                max-width: 150px;
+                max-width: 110px;
             }
 
             .form-grid {
@@ -284,7 +314,7 @@
             }
 
             .logo-box img {
-                max-width: 130px;
+                max-width: 100px;
             }
 
             input,
@@ -304,6 +334,11 @@
         }
 
         @media print {
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
+
             body {
                 background: #fff;
                 padding: 0;
@@ -315,34 +350,60 @@
             }
 
             .print-area {
+                width: auto;
+                min-height: auto;
+                margin: 0;
                 padding: 0;
+                background: #fff;
+            }
+
+            .invoice-logo img {
+                max-width: 75px;
+                width: 75px;
+                height: auto;
+            }
+
+            .invoice-header {
+                text-align: center;
+                margin-bottom: 14px;
+            }
+
+            .invoice-header h2 {
+                margin: 4px 0;
+                color: var(--primary);
+                font-size: 20px;
+            }
+
+            .invoice-header p {
+                margin: 3px 0;
+                font-size: 12px;
             }
 
             .invoice-print {
                 width: 100%;
                 border-collapse: collapse;
-                margin-top: 20px;
+                margin-top: 14px;
+                table-layout: fixed;
             }
 
             .invoice-print td {
                 border: 1px solid #000;
-                padding: 10px;
+                padding: 8px;
                 text-align: right;
-            }
-
-            .invoice-header {
-                text-align: center;
-                margin-bottom: 20px;
-            }
-
-            .invoice-header h2 {
-                margin: 0;
-                color: var(--primary);
+                font-size: 13px;
+                line-height: 1.6;
+                word-break: break-word;
+                overflow-wrap: anywhere;
             }
 
             .terms {
-                margin-top: 30px;
-                font-size: 14px;
+                margin-top: 20px;
+                font-size: 12.5px;
+                line-height: 1.7;
+            }
+
+            .signatures {
+                margin-top: 24px;
             }
 
             .tag-print {
@@ -565,9 +626,6 @@
     </div>
 </div>
 
-<!-- مكتبة PDF الرئيسية -->
-https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.jsscript>
-
 <script>
     document.getElementById('dateReg').valueAsDate = new Date();
 
@@ -646,12 +704,13 @@ https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js
 
         function tryLoad() {
             if (index >= sources.length) {
-                alert('تعذر تحميل مكتبة PDF. تأكد من رفع ملف html2pdf.bundle.min.js بجانب invoice.html أو تأكد من الاتصال بالإنترنت.');
+                alert('تعذر تحميل مكتبة PDF. تأكد من الاتصال بالإنترنت أو ارفع ملف html2pdf.bundle.min.js بجانب invoice.html.');
                 return;
             }
 
             const script = document.createElement('script');
             script.src = sources[index];
+            script.async = true;
 
             script.onload = function () {
                 if (typeof html2pdf !== 'undefined') {
@@ -684,13 +743,12 @@ https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js
             const refNo = cleanFileName(document.getElementById('refNo').value) || 'رقم_بدون';
             const custName = cleanFileName(document.getElementById('custName').value) || 'اسم_بدون';
 
-            // اسم ملف PDF حسب المطلوب:
-            // رقم الفاتورة - اسم الزبون.pdf
+            // اسم الملف سيكون: رقم الفاتورة - اسم الزبون.pdf
             // مثال: 1001 - احمد علي.pdf
             const pdfFileName = refNo + ' - ' + custName + '.pdf';
 
             const options = {
-                margin: 10,
+                margin: [8, 8, 8, 8],
                 filename: pdfFileName,
                 image: {
                     type: 'jpeg',
@@ -698,12 +756,19 @@ https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js
                 },
                 html2canvas: {
                     scale: 2,
-                    useCORS: true
+                    useCORS: true,
+                    allowTaint: true,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: 794
                 },
                 jsPDF: {
                     unit: 'mm',
                     format: 'a4',
                     orientation: 'portrait'
+                },
+                pagebreak: {
+                    mode: ['avoid-all', 'css', 'legacy']
                 }
             };
 
