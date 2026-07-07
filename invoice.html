@@ -497,6 +497,7 @@
 
     <div class="terms">
         <b>الشروط والأحكام:</b>
+
         <ul>
             <li>الشركة لن تسلم أي منتج إلا بوجود الوصل الورقي.</li>
             <li>يسقط الضمان إذا تم فتح المنتج خارج الورشة المركزية أو أحد الورش المعتمدة.</li>
@@ -638,8 +639,8 @@ https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js
         const refNo = cleanFileName(document.getElementById('refNo').value) || 'رقم_بدون';
         const custName = cleanFileName(document.getElementById('custName').value) || 'اسم_بدون';
 
-        // اسم ملف PDF حسب المطلوب:
-        // رقم الفاتورة - اسم الزبون.pdf
+        // اسم الملف سيكون: رقم الفاتورة - اسم الزبون.pdf
+        // مثال: 1001 - احمد علي.pdf
         const pdfFileName = refNo + ' - ' + custName + '.pdf';
 
         const options = {
