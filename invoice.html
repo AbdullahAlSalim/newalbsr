@@ -388,11 +388,10 @@
     <h1>نظام الصيانة - مركز نيوال (البصرة)</h1>
 
     <div class="logo-box">
-        <img src="newal.jpg" alt="Newal Logo">
+        newal.jpg
     </div>
 
     <div class="form-grid">
-
         <div class="form-group">
             <label>رقم الفاتورة / الوصل:</label>
             <input type="text" id="refNo" value="1001">
@@ -430,7 +429,6 @@
                 <option value="خارج الضمان">خارج الضمان</option>
             </select>
         </div>
-
     </div>
 
     <div class="actions">
@@ -443,9 +441,8 @@
 
 <div id="invoiceTemplate" class="print-area">
     <div class="invoice-header">
-
         <div class="invoice-logo">
-            <img src="newal.jpg" alt="Newal Logo">
+            newal.jpg
         </div>
 
         <h2>مركز صيانة نيوال</h2>
@@ -511,13 +508,13 @@
             <div class="signature-box">
                 توقيع مسؤول الورشة:
                 <br><br>
-                __________________
+                ____________________
             </div>
 
             <div class="signature-box">
                 توقيع الزبون المستلم:
                 <br><br>
-                __________________
+                ____________________
             </div>
         </div>
     </div>
@@ -567,7 +564,7 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.jsscript>
 
 <script>
     document.getElementById('dateReg').valueAsDate = new Date();
@@ -604,7 +601,6 @@
 
     function printDocument(type) {
         populateData();
-
         hidePrintTemplates();
 
         if (type === 'invoice') {
@@ -620,19 +616,35 @@
         }, 500);
     }
 
+    function cleanFileName(value) {
+        value = (value || '').toString().trim();
+
+        // استبدال الرموز غير المسموح بها في أسماء الملفات مثل / و \ و : وغيرها
+        value = value.replace(/[\\/:*?"<>|]/g, '-');
+
+        // تقليل المسافات والشرطات المتكررة
+        value = value.replace(/\s+/g, ' ').replace(/-+/g, '-').trim();
+
+        return value;
+    }
+
     function savePDF() {
         populateData();
-
         hidePrintTemplates();
 
         const invoice = document.getElementById('invoiceTemplate');
         invoice.style.display = 'block';
 
-        const refNo = document.getElementById('refNo').value || 'invoice';
+        const refNo = cleanFileName(document.getElementById('refNo').value) || 'رقم_بدون';
+        const custName = cleanFileName(document.getElementById('custName').value) || 'اسم_بدون';
+
+        // اسم ملف PDF حسب المطلوب:
+        // رقم الفاتورة - اسم الزبون.pdf
+        const pdfFileName = refNo + ' - ' + custName + '.pdf';
 
         const options = {
             margin: 10,
-            filename: 'فاتورة_صيانة_' + refNo + '.pdf',
+            filename: pdfFileName,
             image: {
                 type: 'jpeg',
                 quality: 1
@@ -712,15 +724,15 @@
         });
 
         const url = URL.createObjectURL(blob);
-
         const link = document.createElement('a');
+
         link.href = url;
         link.download = 'سجل_صيانة_' + refNo + '.csv';
 
         document.body.appendChild(link);
         link.click();
-
         document.body.removeChild(link);
+
         URL.revokeObjectURL(url);
 
         const currentRef = parseInt(refNo);
