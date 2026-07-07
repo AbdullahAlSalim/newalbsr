@@ -388,11 +388,10 @@
     <h1>نظام الصيانة - مركز نيوال (البصرة)</h1>
 
     <div class="logo-box">
-        <img src="newal.jpg" alt="Newal Logo">
+        newal.jpg
     </div>
 
     <div class="form-grid">
-
         <div class="form-group">
             <label>رقم الفاتورة / الوصل:</label>
             <input type="text" id="refNo" value="1001">
@@ -430,7 +429,6 @@
                 <option value="خارج الضمان">خارج الضمان</option>
             </select>
         </div>
-
     </div>
 
     <div class="actions">
@@ -443,9 +441,8 @@
 
 <div id="invoiceTemplate" class="print-area">
     <div class="invoice-header">
-
         <div class="invoice-logo">
-            <img src="newal.jpg" alt="Newal Logo">
+            newal.jpg
         </div>
 
         <h2>مركز صيانة نيوال</h2>
@@ -500,6 +497,7 @@
 
     <div class="terms">
         <b>الشروط والأحكام:</b>
+
         <ul>
             <li>الشركة لن تسلم أي منتج إلا بوجود الوصل الورقي.</li>
             <li>يسقط الضمان إذا تم فتح المنتج خارج الورشة المركزية أو أحد الورش المعتمدة.</li>
@@ -511,13 +509,13 @@
             <div class="signature-box">
                 توقيع مسؤول الورشة:
                 <br><br>
-                __________________
+                ____________________
             </div>
 
             <div class="signature-box">
                 توقيع الزبون المستلم:
                 <br><br>
-                __________________
+                ____________________
             </div>
         </div>
     </div>
@@ -567,7 +565,8 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- مكتبة PDF الرئيسية -->
+https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.jsscript>
 
 <script>
     document.getElementById('dateReg').valueAsDate = new Date();
@@ -604,7 +603,6 @@
 
     function printDocument(type) {
         populateData();
-
         hidePrintTemplates();
 
         if (type === 'invoice') {
@@ -620,47 +618,107 @@
         }, 500);
     }
 
-    function savePDF() {
-        populateData();
+    function cleanFileName(value) {
+        value = (value || '').toString().trim();
 
-        hidePrintTemplates();
+        // استبدال الرموز غير المسموح بها في أسماء الملفات مثل / و \ و : وغيرها
+        value = value.replace(/[\\/:*?"<>|]/g, '-');
 
-        const invoice = document.getElementById('invoiceTemplate');
-        invoice.style.display = 'block';
+        // تقليل المسافات والشرطات المتكررة
+        value = value.replace(/\s+/g, ' ').replace(/-+/g, '-').trim();
 
-        const refNo = document.getElementById('refNo').value || 'invoice';
+        return value;
+    }
 
-        const options = {
-            margin: 10,
-            filename: 'فاتورة_صيانة_' + refNo + '.pdf',
-            image: {
-                type: 'jpeg',
-                quality: 1
-            },
-            html2canvas: {
-                scale: 2,
-                useCORS: true
-            },
-            jsPDF: {
-                unit: 'mm',
-                format: 'a4',
-                orientation: 'portrait'
-            }
-        };
-
-        if (typeof html2pdf === 'undefined') {
-            alert('تعذر تحميل مكتبة PDF. تأكد من الاتصال بالإنترنت ثم حاول مرة أخرى.');
-            invoice.style.display = 'none';
+    function loadHtml2Pdf(callback) {
+        if (typeof html2pdf !== 'undefined') {
+            callback();
             return;
         }
 
-        html2pdf()
-            .set(options)
-            .from(invoice)
-            .save()
-            .then(function () {
-                invoice.style.display = 'none';
-            });
+        const sources = [
+            'html2pdf.bundle.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
+            'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js'
+        ];
+
+        let index = 0;
+
+        function tryLoad() {
+            if (index >= sources.length) {
+                alert('تعذر تحميل مكتبة PDF. تأكد من رفع ملف html2pdf.bundle.min.js بجانب invoice.html أو تأكد من الاتصال بالإنترنت.');
+                return;
+            }
+
+            const script = document.createElement('script');
+            script.src = sources[index];
+
+            script.onload = function () {
+                if (typeof html2pdf !== 'undefined') {
+                    callback();
+                } else {
+                    index++;
+                    tryLoad();
+                }
+            };
+
+            script.onerror = function () {
+                index++;
+                tryLoad();
+            };
+
+            document.head.appendChild(script);
+        }
+
+        tryLoad();
+    }
+
+    function savePDF() {
+        loadHtml2Pdf(function () {
+            populateData();
+            hidePrintTemplates();
+
+            const invoice = document.getElementById('invoiceTemplate');
+            invoice.style.display = 'block';
+
+            const refNo = cleanFileName(document.getElementById('refNo').value) || 'رقم_بدون';
+            const custName = cleanFileName(document.getElementById('custName').value) || 'اسم_بدون';
+
+            // اسم ملف PDF حسب المطلوب:
+            // رقم الفاتورة - اسم الزبون.pdf
+            // مثال: 1001 - احمد علي.pdf
+            const pdfFileName = refNo + ' - ' + custName + '.pdf';
+
+            const options = {
+                margin: 10,
+                filename: pdfFileName,
+                image: {
+                    type: 'jpeg',
+                    quality: 1
+                },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                }
+            };
+
+            html2pdf()
+                .set(options)
+                .from(invoice)
+                .save()
+                .then(function () {
+                    invoice.style.display = 'none';
+                })
+                .catch(function () {
+                    invoice.style.display = 'none';
+                    alert('حدث خطأ أثناء إنشاء ملف PDF.');
+                });
+        });
     }
 
     function escapeCSV(value) {
@@ -712,15 +770,15 @@
         });
 
         const url = URL.createObjectURL(blob);
-
         const link = document.createElement('a');
+
         link.href = url;
-        link.download = 'سجل_صيانة_' + refNo + '.csv';
+        link.download = 'سجل_صيانة_' + cleanFileName(refNo) + '.csv';
 
         document.body.appendChild(link);
         link.click();
-
         document.body.removeChild(link);
+
         URL.revokeObjectURL(url);
 
         const currentRef = parseInt(refNo);
