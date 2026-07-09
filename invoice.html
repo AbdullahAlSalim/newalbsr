@@ -8,65 +8,74 @@
     <style>
         :root {
             --primary: #1B365D;
+            --primary-dark: #122540;
             --secondary: #F2F5F8;
-            --text: #333;
+            --text: #222;
+            --muted: #666;
             --green: #27ae60;
             --orange: #e67e22;
             --red: #c0392b;
+            --border: #d8dee6;
+            --page-bg: #f4f7f6;
         }
 
         * {
             box-sizing: border-box;
         }
 
-        html, body {
-            height: 100%;
+        html {
+            -webkit-text-size-adjust: 100%;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+            background-color: var(--page-bg);
             color: var(--text);
             margin: 0;
             padding: 20px;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
+            line-height: 1.6;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
         }
 
         .container {
-            max-width: 900px;
+            width: 100%;
+            max-width: 920px;
             margin: 0 auto;
             background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
         }
 
         h1 {
             color: var(--primary);
             text-align: center;
             border-bottom: 2px solid var(--primary);
-            padding-bottom: 10px;
+            padding-bottom: 12px;
             font-size: 26px;
-            margin-bottom: 10px;
+            margin: 0 0 12px;
+            line-height: 1.4;
         }
 
         .logo-box {
             text-align: center;
-            margin: 10px 0 20px 0;
+            margin: 12px 0 24px;
         }
 
         .logo-box img {
+            width: 120px;
             max-width: 120px;
-            width: 100%;
-            height: auto;
             display: inline-block;
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
             margin-bottom: 20px;
         }
 
@@ -75,71 +84,89 @@
             flex-direction: column;
         }
 
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
         label {
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-weight: 700;
+            margin-bottom: 6px;
             color: var(--primary);
+            font-size: 14.5px;
         }
 
         input,
         select {
-            padding: 11px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             font-family: inherit;
             font-size: 15px;
-            width: 100%;
+            color: var(--text);
+            background: #fff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .full-width {
-            grid-column: span 2;
-        }
-
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            transition: 0.3s;
-            font-family: inherit;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background-color: #122540;
-        }
-
-        .btn-secondary {
-            background-color: var(--green);
-            color: #fff;
-        }
-
-        .btn-export {
-            background-color: var(--orange);
-            color: #fff;
-        }
-
-        .btn-pdf {
-            background-color: var(--red);
-            color: #fff;
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(27, 54, 93, 0.12);
         }
 
         .actions {
             text-align: center;
-            margin-top: 20px;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
+            margin-top: 22px;
+            border-top: 1px solid #eef1f4;
+            padding-top: 22px;
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
             gap: 10px;
         }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15.5px;
+            transition: 0.25s;
+            font-family: inherit;
+            color: #fff;
+            min-width: 175px;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            opacity: 0.95;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--green);
+        }
+
+        .btn-export {
+            background-color: var(--orange);
+        }
+
+        .btn-pdf {
+            background-color: var(--red);
+        }
+
+        /* =========================
+           Print Templates
+        ========================= */
 
         .print-area {
             display: none;
@@ -147,31 +174,16 @@
             color: #000;
         }
 
-        /* Used only while html2pdf/html2canvas is capturing the invoice.
-           html2canvas needs the node to have real, positive on-page
-           coordinates and real dimensions to render it correctly - an
-           element pushed far off-screen (e.g. left:-9999px) can be measured
-           as zero-size by some canvas engines and produce a blank PDF.
-           So instead we place it at the top of the page, above everything
-           else (z-index), for the brief moment of capture only. */
-        .print-area.pdf-render {
-            display: block;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 190mm;
-            background: #fff;
-            z-index: 999999;
-        }
-
         .invoice-page {
             width: 190mm;
             max-width: 190mm;
-            background: #fff;
+            min-height: 277mm;
             margin: 0 auto;
             padding: 0;
+            background: #fff;
             direction: rtl;
             text-align: right;
+            color: #000;
         }
 
         .invoice-header {
@@ -185,34 +197,34 @@
         }
 
         .invoice-logo img {
-            width: 60px;
-            max-width: 60px;
-            height: auto;
+            width: 62px;
+            max-width: 62px;
             display: inline-block;
         }
 
         .invoice-header h2 {
-            margin: 3px 0;
+            margin: 2px 0;
             color: var(--primary);
-            font-size: 21px;
-            line-height: 1.3;
+            font-size: 22px;
+            line-height: 1.35;
         }
 
         .invoice-header p {
             margin: 2px 0;
-            font-size: 12px;
-            line-height: 1.4;
+            font-size: 12.5px;
+            line-height: 1.45;
+            color: #000;
         }
 
         .invoice-title {
             text-align: center;
             color: #000;
-            margin: 10px 0;
+            margin: 12px 0;
             font-size: 17px;
-            font-weight: bold;
-            border-top: 1px solid #000;
-            border-bottom: 1px solid #000;
-            padding: 6px 0;
+            font-weight: 700;
+            border-top: 1.5px solid #000;
+            border-bottom: 1.5px solid #000;
+            padding: 7px 0;
         }
 
         .invoice-details {
@@ -221,6 +233,7 @@
             table-layout: fixed;
             margin-top: 10px;
             direction: rtl;
+            page-break-inside: avoid;
         }
 
         .invoice-details th,
@@ -228,41 +241,41 @@
             border: 1px solid #000;
             padding: 8px 10px;
             font-size: 13.5px;
-            line-height: 1.6;
+            line-height: 1.55;
             vertical-align: top;
             text-align: right;
             word-break: break-word;
             overflow-wrap: anywhere;
+            color: #000;
         }
 
         .invoice-details th {
             width: 34%;
             background: #f2f2f2;
-            color: #000;
-            font-weight: bold;
+            font-weight: 700;
         }
 
         .invoice-details td {
             width: 66%;
-            color: #000;
-            min-height: 28px;
+            min-height: 30px;
         }
 
         .terms {
             margin-top: 18px;
             font-size: 12.5px;
-            line-height: 1.7;
+            line-height: 1.75;
             color: #000;
+            page-break-inside: avoid;
         }
 
         .terms-title {
-            font-weight: bold;
+            font-weight: 700;
             margin-bottom: 5px;
         }
 
         .terms ul {
-            margin: 5px 0 0 0;
-            padding-right: 20px;
+            margin: 5px 0 0;
+            padding-right: 22px;
         }
 
         .terms li {
@@ -273,7 +286,8 @@
             display: flex;
             justify-content: space-between;
             gap: 30px;
-            margin-top: 25px;
+            margin-top: 26px;
+            page-break-inside: avoid;
         }
 
         .signature-box {
@@ -283,45 +297,76 @@
             color: #000;
         }
 
+        .signature-line {
+            display: inline-block;
+            margin-top: 20px;
+            width: 80%;
+            border-bottom: 1px solid #000;
+            height: 1px;
+        }
+
+        /* =========================
+           Service Tag
+        ========================= */
+
         .tag-print {
             width: 8cm;
+            max-width: 8cm;
             border: 2px solid #000;
             padding: 10px;
             margin: 0 auto;
-            font-size: 14px;
+            font-size: 13.5px;
             background: #fff;
+            color: #000;
             direction: ltr;
             text-align: left;
+            page-break-inside: avoid;
         }
 
         .tag-print-header {
             background-color: #000;
             color: #fff;
             text-align: center;
-            padding: 5px;
-            font-weight: bold;
+            padding: 6px;
+            font-weight: 700;
+            line-height: 1.35;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .tag-print-header span {
+            font-size: 10px;
+            font-style: italic;
+            font-weight: 400;
         }
 
         .tag-print table {
             width: 100%;
             margin-top: 10px;
             border-collapse: collapse;
+            table-layout: fixed;
         }
 
         .tag-print table td {
             padding: 5px;
-            border-bottom: 1px dashed #ccc;
+            border-bottom: 1px dashed #bdbdbd;
             word-break: break-word;
-        }
-
-        .tag-print table td {
-            text-align: left;
+            overflow-wrap: anywhere;
+            vertical-align: top;
         }
 
         .tag-print table td:first-child {
-            font-weight: bold;
-            width: 45%;
+            font-weight: 700;
+            width: 43%;
         }
+
+        .tag-print table td:last-child {
+            width: 57%;
+        }
+
+        /* =========================
+           Responsive
+        ========================= */
 
         @media (max-width: 768px) {
             body {
@@ -329,7 +374,8 @@
             }
 
             .container {
-                padding: 15px;
+                padding: 16px;
+                border-radius: 10px;
             }
 
             h1 {
@@ -337,15 +383,12 @@
             }
 
             .logo-box img {
-                max-width: 110px;
+                max-width: 105px;
             }
 
             .form-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .full-width {
-                grid-column: span 1;
+                gap: 13px;
             }
 
             .actions {
@@ -354,12 +397,13 @@
 
             button {
                 width: 100%;
+                min-width: 0;
                 font-size: 15px;
             }
 
             .signatures {
                 flex-direction: column;
-                gap: 15px;
+                gap: 16px;
             }
 
             .signature-box {
@@ -372,20 +416,27 @@
             }
         }
 
+        /* =========================
+           Print A4
+        ========================= */
+
         @media print {
             @page {
-                size: A4;
+                size: A4 portrait;
                 margin: 10mm;
             }
 
-            html, body {
-                background: #fff;
-                padding: 0;
-                margin: 0;
-                height: auto;
+            html,
+            body {
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fff !important;
+                color: #000 !important;
             }
 
-            * {
+            body {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -394,90 +445,94 @@
                 display: none !important;
             }
 
-            /* Nothing prints unless the body carries one of these state
-               classes (set briefly by printDocument() before window.print()).
-               This keeps both templates safely hidden on screen at all times,
-               eliminating any flash of the invoice/tag on the visible page. */
             .print-area {
                 display: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fff !important;
             }
 
-            body.printing-invoice #invoiceTemplate,
+            body.printing-invoice #invoiceTemplate {
+                display: block !important;
+            }
+
             body.printing-tag #tagTemplate {
                 display: block !important;
-                padding: 0;
-                margin: 0;
-                background: #fff;
             }
 
             .invoice-page {
-                width: auto;
-                max-width: none;
-                margin: 0;
-                padding: 0;
+                width: 190mm !important;
+                max-width: 190mm !important;
+                min-height: auto !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
             }
 
             .invoice-logo img {
-                width: 55px;
-                max-width: 55px;
+                width: 55px !important;
+                max-width: 55px !important;
+            }
+
+            .invoice-header {
+                margin-bottom: 10px !important;
             }
 
             .invoice-header h2 {
-                font-size: 20px;
+                font-size: 20px !important;
+                margin: 2px 0 !important;
             }
 
             .invoice-header p {
-                font-size: 12px;
+                font-size: 12px !important;
             }
 
-            .invoice-details {
-                page-break-inside: auto;
-            }
-
-            .invoice-details tr {
-                page-break-inside: avoid;
-                page-break-after: auto;
+            .invoice-title {
+                font-size: 16px !important;
+                margin: 10px 0 !important;
+                padding: 6px 0 !important;
             }
 
             .invoice-details th,
             .invoice-details td {
-                padding: 7px 9px;
-                font-size: 13px;
-                background: #f2f2f2;
-            }
-
-            .invoice-details td {
-                background: #fff;
-            }
-
-            .invoice-header,
-            .invoice-title {
-                page-break-after: avoid;
+                padding: 7px 9px !important;
+                font-size: 13px !important;
+                line-height: 1.5 !important;
             }
 
             .terms {
-                font-size: 12px;
-                page-break-inside: avoid;
+                font-size: 12px !important;
+                margin-top: 16px !important;
+                line-height: 1.65 !important;
             }
 
             .signatures {
-                page-break-inside: avoid;
+                margin-top: 22px !important;
             }
 
             .tag-print {
-                width: 8cm;
-                border: 2px solid #000;
-                padding: 10px;
-                margin: 0 auto;
-                font-size: 14px;
+                width: 8cm !important;
+                max-width: 8cm !important;
+                border: 2px solid #000 !important;
+                padding: 10px !important;
+                margin: 0 auto !important;
+                font-size: 13.5px !important;
+                background: #fff !important;
+                color: #000 !important;
             }
 
             .tag-print-header {
                 background-color: #000 !important;
                 color: #fff !important;
-                text-align: center;
-                padding: 5px;
-                font-weight: bold;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            a,
+            a:visited {
+                color: #000 !important;
+                text-decoration: none !important;
             }
         }
     </style>
@@ -489,13 +544,13 @@
     <h1>نظام الصيانة - مركز نيوال (البصرة)</h1>
 
     <div class="logo-box">
-        <img src="newal.jpg" alt="شعار مركز صيانة نيوال" onerror="this.style.display='none'">
+        newal.jpg
     </div>
 
     <div class="form-grid">
         <div class="form-group">
             <label for="refNo">رقم الفاتورة / الوصل:</label>
-            <input type="text" id="refNo" value="1001">
+            <input type="text" id="refNo" value="1001" autocomplete="off">
         </div>
 
         <div class="form-group">
@@ -505,22 +560,22 @@
 
         <div class="form-group">
             <label for="custName">اسم الزبون / الوكيل:</label>
-            <input type="text" id="custName" placeholder="أدخل اسم الزبون">
+            <input type="text" id="custName" placeholder="أدخل اسم الزبون" autocomplete="off">
         </div>
 
         <div class="form-group">
             <label for="phone">رقم الهاتف:</label>
-            <input type="text" id="phone" placeholder="077xxxxxxx">
+            <input type="tel" id="phone" placeholder="077xxxxxxx" autocomplete="off">
         </div>
 
         <div class="form-group full-width">
             <label for="modelNo">كود المنتج / رقم الموديل:</label>
-            <input type="text" id="modelNo" placeholder="Zio-Exclusive ...">
+            <input type="text" id="modelNo" placeholder="Zio-Exclusive ..." autocomplete="off">
         </div>
 
         <div class="form-group full-width">
             <label for="serialNo">رقم السيريال:</label>
-            <input type="text" id="serialNo" placeholder="SN-123456">
+            <input type="text" id="serialNo" placeholder="SN-123456" autocomplete="off">
         </div>
 
         <div class="form-group full-width">
@@ -533,18 +588,19 @@
     </div>
 
     <div class="actions">
-        <button class="btn-primary" onclick="printDocument('invoice')">طباعة الفاتورة 📄</button>
-        <button class="btn-secondary" onclick="printDocument('tag')">طباعة بطاقة الخدمة 🏷️</button>
-        <button class="btn-pdf" onclick="savePDF()">حفظ الفاتورة PDF 📑</button>
-        <button class="btn-export" onclick="saveAndExport()">حفظ وتصدير السجل CSV 💾</button>
+        <button class="btn-primary" type="button" onclick="printDocument('invoice')">طباعة الفاتورة 📄</button>
+        <button class="btn-secondary" type="button" onclick="printDocument('tag')">طباعة بطاقة الخدمة 🏷️</button>
+        <button class="btn-pdf" type="button" onclick="savePDF()">حفظ الفاتورة PDF 📑</button>
+        <button class="btn-export" type="button" onclick="saveAndExport()">حفظ وتصدير السجل CSV 💾</button>
     </div>
 </div>
 
+<!-- Invoice Print Template -->
 <div id="invoiceTemplate" class="print-area">
-    <div class="invoice-page">
+    <div id="invoicePage" class="invoice-page">
         <div class="invoice-header">
             <div class="invoice-logo">
-                <img src="newal.jpg" alt="شعار مركز صيانة نيوال" onerror="this.style.display='none'">
+                newal.jpg
             </div>
 
             <h2>مركز صيانة نيوال</h2>
@@ -559,32 +615,26 @@
                 <th>رقم الوصل</th>
                 <td id="p-ref"></td>
             </tr>
-
             <tr>
                 <th>تاريخ تسجيل الخدمة</th>
                 <td id="p-date"></td>
             </tr>
-
             <tr>
                 <th>اسم الزبون / الوكيل</th>
                 <td id="p-name"></td>
             </tr>
-
             <tr>
                 <th>رقم الهاتف</th>
                 <td id="p-phone"></td>
             </tr>
-
             <tr>
                 <th>كود المنتج / رقم الموديل</th>
                 <td id="p-model"></td>
             </tr>
-
             <tr>
                 <th>رقم السيريال</th>
                 <td id="p-serial"></td>
             </tr>
-
             <tr>
                 <th>حالة الضمان</th>
                 <td id="p-warranty"></td>
@@ -593,7 +643,6 @@
 
         <div class="terms">
             <div class="terms-title">الشروط والأحكام:</div>
-
             <ul>
                 <li>الشركة لن تسلم أي منتج إلا بوجود الوصل الورقي.</li>
                 <li>يسقط الضمان إذا تم فتح المنتج خارج الورشة المركزية أو أحد الورش المعتمدة.</li>
@@ -604,28 +653,27 @@
             <div class="signatures">
                 <div class="signature-box">
                     توقيع مسؤول الورشة:
-                    <br><br>
-                    ____________________
+                    <br>
+                    <span class="signature-line"></span>
                 </div>
 
                 <div class="signature-box">
                     توقيع الزبون المستلم:
-                    <br><br>
-                    ____________________
+                    <br>
+                    <span class="signature-line"></span>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Service Tag Print Template -->
 <div id="tagTemplate" class="print-area">
     <div class="tag-print">
         <div class="tag-print-header">
             newal Zio EXCLUSIVE
             <br>
-            <span style="font-size:10px; font-style:italic; font-weight:normal;">
-                Make your life better...
-            </span>
+            <span>Make your life better...</span>
         </div>
 
         <table>
@@ -633,27 +681,22 @@
                 <td>Service Reg No:</td>
                 <td id="t-ref"></td>
             </tr>
-
             <tr>
                 <td>Customer Name:</td>
                 <td id="t-name"></td>
             </tr>
-
             <tr>
                 <td>Model No:</td>
                 <td id="t-model"></td>
             </tr>
-
             <tr>
                 <td>Serial No:</td>
                 <td id="t-serial"></td>
             </tr>
-
             <tr>
                 <td>Warranty:</td>
                 <td id="t-warranty"></td>
             </tr>
-
             <tr>
                 <td>Service Reg Date:</td>
                 <td id="t-date"></td>
@@ -663,95 +706,137 @@
 </div>
 
 <script>
-    document.getElementById('dateReg').valueAsDate = new Date();
+    "use strict";
 
-    function populateData() {
-        const refNo = document.getElementById('refNo').value;
-        const dateReg = document.getElementById('dateReg').value;
-        const custName = document.getElementById('custName').value;
-        const phone = document.getElementById('phone').value;
-        const modelNo = document.getElementById('modelNo').value;
-        const serialNo = document.getElementById('serialNo').value;
-        const warranty = document.getElementById('warranty').value;
+    document.addEventListener("DOMContentLoaded", function () {
+        const dateInput = document.getElementById("dateReg");
 
-        document.getElementById('p-ref').innerText = refNo || '';
-        document.getElementById('p-date').innerText = dateReg || '';
-        document.getElementById('p-name').innerText = custName || '';
-        document.getElementById('p-phone').innerText = phone || '';
-        document.getElementById('p-model').innerText = modelNo || '';
-        document.getElementById('p-serial').innerText = serialNo || '';
-        document.getElementById('p-warranty').innerText = warranty || '';
-
-        document.getElementById('t-ref').innerText = refNo || '';
-        document.getElementById('t-name').innerText = custName || '';
-        document.getElementById('t-model').innerText = modelNo || '';
-        document.getElementById('t-serial').innerText = serialNo || '';
-        document.getElementById('t-warranty').innerText = warranty || '';
-        document.getElementById('t-date').innerText = dateReg || '';
-    }
-
-    function clearPrintState() {
-        document.body.classList.remove('printing-invoice', 'printing-tag');
-    }
-
-    // The invoice/tag templates stay hidden on screen at all times (.print-area
-    // has display:none). We only ever reveal them through a body class that is
-    // scoped inside @media print, so nothing ever flashes on the visible page -
-    // it only appears in the actual print output / print preview.
-    function printDocument(type) {
-        populateData();
-        clearPrintState();
-
-        if (type === 'invoice') {
-            document.body.classList.add('printing-invoice');
-        } else if (type === 'tag') {
-            document.body.classList.add('printing-tag');
+        if (dateInput && !dateInput.value) {
+            dateInput.valueAsDate = new Date();
         }
 
-        window.print();
+        window.addEventListener("afterprint", resetPrintMode);
+    });
+
+    function getValue(id) {
+        const element = document.getElementById(id);
+        return element ? element.value.trim() : "";
     }
 
-    // Fallback cleanup for browsers that don't fire 'afterprint' reliably.
-    window.addEventListener('afterprint', clearPrintState);
+    function setText(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value || "";
+        }
+    }
+
+    function formatDate(dateValue) {
+        if (!dateValue) {
+            return "";
+        }
+
+        const parts = dateValue.split("-");
+        if (parts.length !== 3) {
+            return dateValue;
+        }
+
+        return parts[2] + "/" + parts[1] + "/" + parts[0];
+    }
+
+    function populateData() {
+        const refNo = getValue("refNo");
+        const dateReg = getValue("dateReg");
+        const custName = getValue("custName");
+        const phone = getValue("phone");
+        const modelNo = getValue("modelNo");
+        const serialNo = getValue("serialNo");
+        const warranty = getValue("warranty");
+        const formattedDate = formatDate(dateReg);
+
+        setText("p-ref", refNo);
+        setText("p-date", formattedDate);
+        setText("p-name", custName);
+        setText("p-phone", phone);
+        setText("p-model", modelNo);
+        setText("p-serial", serialNo);
+        setText("p-warranty", warranty);
+
+        setText("t-ref", refNo);
+        setText("t-name", custName);
+        setText("t-model", modelNo);
+        setText("t-serial", serialNo);
+        setText("t-warranty", warranty);
+        setText("t-date", formattedDate);
+    }
+
+    function resetPrintMode() {
+        document.body.classList.remove("printing-invoice", "printing-tag");
+    }
+
+    function printDocument(type) {
+        populateData();
+        resetPrintMode();
+
+        if (type === "invoice") {
+            document.body.classList.add("printing-invoice");
+        } else if (type === "tag") {
+            document.body.classList.add("printing-tag");
+        } else {
+            return;
+        }
+
+        setTimeout(function () {
+            window.print();
+        }, 100);
+
+        /*
+            بعض المتصفحات لا تطلق حدث afterprint بشكل صحيح،
+            لذلك نضع احتياط لإزالة وضع الطباعة بعد فترة.
+        */
+        setTimeout(resetPrintMode, 1500);
+    }
 
     function cleanFileName(value) {
-        value = (value || '').toString().trim();
+        value = (value || "").toString().trim();
 
-        // استبدال الرموز غير المسموح بها في أسماء الملفات مثل / و \ و : وغيرها
-        value = value.replace(/[\\/:*?"<>|]/g, '-');
-
-        // تقليل المسافات والشرطات المتكررة
-        value = value.replace(/\s+/g, ' ').replace(/-+/g, '-').trim();
+        /*
+            إزالة الرموز غير المسموحة في أسماء الملفات:
+            \ / : * ? " < > |
+        */
+        value = value.replace(/[\\/:*?"<>|]/g, "-");
+        value = value.replace(/\s+/g, " ");
+        value = value.replace(/-+/g, "-");
+        value = value.trim();
 
         return value;
     }
 
     function loadHtml2Pdf(callback) {
-        if (typeof html2pdf !== 'undefined') {
+        if (typeof html2pdf !== "undefined") {
             callback();
             return;
         }
 
         const sources = [
-            'html2pdf.bundle.min.js',
-            'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
-            'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js'
+            "html2pdf.bundle.min.js",
+            "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"
         ];
 
         let index = 0;
 
         function tryLoad() {
             if (index >= sources.length) {
-                alert('تعذر تحميل مكتبة PDF. تأكد من الاتصال بالإنترنت أو ارفع ملف html2pdf.bundle.min.js بجانب invoice.html.');
+                alert("تعذر تحميل مكتبة PDF. تأكد من الاتصال بالإنترنت أو ضع ملف html2pdf.bundle.min.js بجانب ملف الصفحة.");
                 return;
             }
 
-            const script = document.createElement('script');
+            const script = document.createElement("script");
             script.src = sources[index];
             script.async = true;
 
             script.onload = function () {
-                if (typeof html2pdf !== 'undefined') {
+                if (typeof html2pdf !== "undefined") {
                     callback();
                 } else {
                     index++;
@@ -771,7 +856,7 @@
     }
 
     function waitForImages(element) {
-        const images = Array.from(element.querySelectorAll('img'));
+        const images = Array.from(element.querySelectorAll("img"));
 
         if (images.length === 0) {
             return Promise.resolve();
@@ -792,66 +877,69 @@
     function savePDF() {
         loadHtml2Pdf(function () {
             populateData();
-            clearPrintState();
 
-            const invoice = document.getElementById('invoiceTemplate');
-            // Bring it fully on-screen (top, above everything) just for the
-            // capture - guarantees html2canvas measures/renders it correctly.
-            invoice.classList.add('pdf-render');
+            const invoiceTemplate = document.getElementById("invoiceTemplate");
+            const invoicePage = document.getElementById("invoicePage");
 
-            const refNo = cleanFileName(document.getElementById('refNo').value) || 'رقم_بدون';
-            const custName = cleanFileName(document.getElementById('custName').value) || 'اسم_بدون';
+            if (!invoiceTemplate || !invoicePage) {
+                alert("لم يتم العثور على قالب الفاتورة.");
+                return;
+            }
 
-            // اسم الملف سيكون: رقم الفاتورة - اسم الزبون.pdf
-            // مثال: 1001 - احمد علي.pdf
-            const pdfFileName = refNo + ' - ' + custName + '.pdf';
+            invoiceTemplate.style.display = "block";
 
-            waitForImages(invoice).then(function () {
+            const refNo = cleanFileName(getValue("refNo")) || "رقم_بدون";
+            const custName = cleanFileName(getValue("custName")) || "اسم_بدون";
+            const pdfFileName = refNo + " - " + custName + ".pdf";
+
+            waitForImages(invoiceTemplate).then(function () {
                 const options = {
-                    margin: [8, 8, 8, 8],
+                    margin: [10, 10, 10, 10],
                     filename: pdfFileName,
                     image: {
-                        type: 'jpeg',
+                        type: "jpeg",
                         quality: 1
                     },
                     html2canvas: {
                         scale: 2,
                         useCORS: true,
                         allowTaint: true,
-                        backgroundColor: '#ffffff',
+                        backgroundColor: "#ffffff",
                         scrollX: 0,
-                        scrollY: 0
+                        scrollY: 0,
+                        windowWidth: invoicePage.scrollWidth
                     },
                     jsPDF: {
-                        unit: 'mm',
-                        format: 'a4',
-                        orientation: 'portrait'
+                        unit: "mm",
+                        format: "a4",
+                        orientation: "portrait"
                     },
                     pagebreak: {
-                        mode: ['css', 'legacy']
+                        mode: ["css", "legacy"],
+                        avoid: [".invoice-details", ".terms", ".signatures"]
                     }
                 };
 
                 html2pdf()
                     .set(options)
-                    .from(invoice)
+                    .from(invoicePage)
                     .save()
                     .then(function () {
-                        invoice.classList.remove('pdf-render');
+                        invoiceTemplate.style.display = "none";
                     })
                     .catch(function () {
-                        invoice.classList.remove('pdf-render');
-                        alert('حدث خطأ أثناء إنشاء ملف PDF.');
+                        invoiceTemplate.style.display = "none";
+                        alert("حدث خطأ أثناء إنشاء ملف PDF.");
                     });
             });
         });
     }
 
     function escapeCSV(value) {
-        value = value || '';
+        value = value || "";
         value = value.toString().replace(/"/g, '""');
 
-        if (value.includes(',') || value.includes('\n') || value.includes('"')) {
+        if (value.includes(",") || value.includes("\n") || value.includes('"')) {
             value = '"' + value + '"';
         }
 
@@ -859,22 +947,22 @@
     }
 
     function saveAndExport() {
-        const refNo = document.getElementById('refNo').value;
-        const dateReg = document.getElementById('dateReg').value;
-        const custName = document.getElementById('custName').value;
-        const phone = document.getElementById('phone').value;
-        const modelNo = document.getElementById('modelNo').value;
-        const serialNo = document.getElementById('serialNo').value;
-        const warranty = document.getElementById('warranty').value;
+        const refNo = getValue("refNo");
+        const dateReg = formatDate(getValue("dateReg"));
+        const custName = getValue("custName");
+        const phone = getValue("phone");
+        const modelNo = getValue("modelNo");
+        const serialNo = getValue("serialNo");
+        const warranty = getValue("warranty");
 
         const header = [
-            'رقم الفاتورة',
-            'التاريخ',
-            'اسم الزبون',
-            'رقم الهاتف',
-            'الموديل',
-            'السيريال',
-            'حالة الضمان'
+            "رقم الفاتورة",
+            "التاريخ",
+            "اسم الزبون",
+            "رقم الهاتف",
+            "الموديل",
+            "السيريال",
+            "حالة الضمان"
         ];
 
         const record = [
@@ -887,19 +975,19 @@
             warranty
         ];
 
-        let csvContent = '\uFEFF';
-        csvContent += header.map(escapeCSV).join(',') + '\n';
-        csvContent += record.map(escapeCSV).join(',') + '\n';
+        let csvContent = "\uFEFF";
+        csvContent += header.map(escapeCSV).join(",") + "\n";
+        csvContent += record.map(escapeCSV).join(",") + "\n";
 
         const blob = new Blob([csvContent], {
-            type: 'text/csv;charset=utf-8;'
+            type: "text/csv;charset=utf-8;"
         });
 
         const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
+        const link = document.createElement("a");
 
         link.href = url;
-        link.download = 'سجل_صيانة_' + cleanFileName(refNo) + '.csv';
+        link.download = "سجل_صيانة_" + (cleanFileName(refNo) || "بدون_رقم") + ".csv";
 
         document.body.appendChild(link);
         link.click();
@@ -907,13 +995,13 @@
 
         URL.revokeObjectURL(url);
 
-        const currentRef = parseInt(refNo);
+        const currentRef = parseInt(refNo, 10);
 
         if (!isNaN(currentRef)) {
-            document.getElementById('refNo').value = currentRef + 1;
+            document.getElementById("refNo").value = currentRef + 1;
         }
 
-        alert('تم التصدير بنجاح!');
+        alert("تم التصدير بنجاح!");
     }
 </script>
 
