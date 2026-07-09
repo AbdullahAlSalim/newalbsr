@@ -9,14 +9,12 @@
         :root {
             --primary: #1B365D;
             --primary-dark: #122540;
-            --secondary: #F2F5F8;
-            --text: #222;
-            --muted: #666;
             --green: #27ae60;
             --orange: #e67e22;
             --red: #c0392b;
+            --text: #222;
             --border: #d8dee6;
-            --page-bg: #f4f7f6;
+            --bg: #f4f7f6;
         }
 
         * {
@@ -28,11 +26,11 @@
         }
 
         body {
-            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-            background-color: var(--page-bg);
-            color: var(--text);
             margin: 0;
             padding: 20px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Tahoma, Arial, "Segoe UI", sans-serif;
             line-height: 1.6;
         }
 
@@ -48,16 +46,16 @@
             background: #fff;
             padding: 24px;
             border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
         }
 
         h1 {
+            margin: 0 0 14px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary);
             color: var(--primary);
             text-align: center;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 12px;
-            font-size: 26px;
-            margin: 0 0 12px;
+            font-size: 25px;
             line-height: 1.4;
         }
 
@@ -76,7 +74,6 @@
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 16px;
-            margin-bottom: 20px;
         }
 
         .form-group {
@@ -89,9 +86,9 @@
         }
 
         label {
-            font-weight: 700;
             margin-bottom: 6px;
             color: var(--primary);
+            font-weight: 700;
             font-size: 14.5px;
         }
 
@@ -103,23 +100,20 @@
             border-radius: 8px;
             font-family: inherit;
             font-size: 15px;
-            color: var(--text);
-            background: #fff;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fff;
         }
 
         input:focus,
         select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(27, 54, 93, 0.12);
+            box-shadow: 0 0 0 3px rgba(27,54,93,0.12);
         }
 
         .actions {
-            text-align: center;
-            margin-top: 22px;
-            border-top: 1px solid #eef1f4;
+            margin-top: 24px;
             padding-top: 22px;
+            border-top: 1px solid #eef1f4;
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
@@ -127,45 +121,39 @@
         }
 
         button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 15.5px;
-            transition: 0.25s;
-            font-family: inherit;
-            color: #fff;
             min-width: 175px;
-        }
-
-        button:hover {
-            transform: translateY(-1px);
-            opacity: 0.95;
+            padding: 12px 18px;
+            border: 0;
+            border-radius: 8px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 15.5px;
+            font-weight: 700;
+            cursor: pointer;
         }
 
         .btn-primary {
-            background-color: var(--primary);
+            background: var(--primary);
         }
 
         .btn-primary:hover {
-            background-color: var(--primary-dark);
+            background: var(--primary-dark);
         }
 
         .btn-secondary {
-            background-color: var(--green);
-        }
-
-        .btn-export {
-            background-color: var(--orange);
+            background: var(--green);
         }
 
         .btn-pdf {
-            background-color: var(--red);
+            background: var(--red);
+        }
+
+        .btn-export {
+            background: var(--orange);
         }
 
         /* =========================
-           Print Templates
+           قوالب الطباعة
         ========================= */
 
         .print-area {
@@ -174,26 +162,25 @@
             color: #000;
         }
 
-        .invoice-page {
+        .invoice-sheet {
             width: 190mm;
             max-width: 190mm;
-            min-height: 277mm;
             margin: 0 auto;
-            padding: 0;
             background: #fff;
+            color: #000;
             direction: rtl;
             text-align: right;
-            color: #000;
+            font-family: Tahoma, Arial, "Segoe UI", sans-serif;
         }
 
         .invoice-header {
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .invoice-logo {
             text-align: center;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         .invoice-logo img {
@@ -205,167 +192,159 @@
         .invoice-header h2 {
             margin: 2px 0;
             color: var(--primary);
-            font-size: 22px;
-            line-height: 1.35;
+            font-size: 21px;
+            line-height: 1.3;
         }
 
         .invoice-header p {
-            margin: 2px 0;
-            font-size: 12.5px;
+            margin: 1px 0;
+            font-size: 12px;
             line-height: 1.45;
             color: #000;
         }
 
         .invoice-title {
-            text-align: center;
-            color: #000;
-            margin: 12px 0;
-            font-size: 17px;
-            font-weight: 700;
+            margin: 10px 0 12px;
+            padding: 6px 0;
             border-top: 1.5px solid #000;
             border-bottom: 1.5px solid #000;
-            padding: 7px 0;
+            text-align: center;
+            font-size: 16.5px;
+            font-weight: 700;
+            color: #000;
         }
 
         .invoice-details {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            margin-top: 10px;
             direction: rtl;
-            page-break-inside: avoid;
         }
 
         .invoice-details th,
         .invoice-details td {
             border: 1px solid #000;
-            padding: 8px 10px;
-            font-size: 13.5px;
-            line-height: 1.55;
-            vertical-align: top;
-            text-align: right;
-            word-break: break-word;
-            overflow-wrap: anywhere;
+            padding: 7px 9px;
             color: #000;
+            font-size: 13px;
+            line-height: 1.55;
+            vertical-align: middle;
+            text-align: right;
         }
 
         .invoice-details th {
-            width: 34%;
+            width: 52mm;
             background: #f2f2f2;
             font-weight: 700;
+            white-space: nowrap;
         }
 
         .invoice-details td {
-            width: 66%;
-            min-height: 30px;
+            width: auto;
+            word-break: break-word;
+            overflow-wrap: anywhere;
         }
 
         .terms {
-            margin-top: 18px;
-            font-size: 12.5px;
-            line-height: 1.75;
+            margin-top: 16px;
             color: #000;
-            page-break-inside: avoid;
+            font-size: 12px;
+            line-height: 1.7;
         }
 
         .terms-title {
+            margin-bottom: 4px;
             font-weight: 700;
-            margin-bottom: 5px;
         }
 
         .terms ul {
-            margin: 5px 0 0;
-            padding-right: 22px;
+            margin: 4px 0 0;
+            padding-right: 20px;
         }
 
         .terms li {
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .signatures {
             display: flex;
             justify-content: space-between;
-            gap: 30px;
-            margin-top: 26px;
-            page-break-inside: avoid;
+            gap: 35px;
+            margin-top: 24px;
         }
 
         .signature-box {
             width: 50%;
             text-align: center;
-            font-size: 12.5px;
+            font-size: 12px;
             color: #000;
         }
 
         .signature-line {
-            display: inline-block;
-            margin-top: 20px;
+            display: block;
             width: 80%;
-            border-bottom: 1px solid #000;
             height: 1px;
+            margin: 20px auto 0;
+            border-bottom: 1px solid #000;
         }
 
         /* =========================
-           Service Tag
+           بطاقة الخدمة
         ========================= */
 
-        .tag-print {
+        .tag-sheet {
             width: 8cm;
             max-width: 8cm;
-            border: 2px solid #000;
-            padding: 10px;
             margin: 0 auto;
-            font-size: 13.5px;
+            padding: 10px;
+            border: 2px solid #000;
             background: #fff;
             color: #000;
+            font-family: Tahoma, Arial, sans-serif;
+            font-size: 13px;
             direction: ltr;
             text-align: left;
-            page-break-inside: avoid;
         }
 
-        .tag-print-header {
-            background-color: #000;
+        .tag-header {
+            padding: 6px;
+            background: #000;
             color: #fff;
             text-align: center;
-            padding: 6px;
             font-weight: 700;
             line-height: 1.35;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }
 
-        .tag-print-header span {
+        .tag-header span {
             font-size: 10px;
             font-style: italic;
             font-weight: 400;
         }
 
-        .tag-print table {
+        .tag-sheet table {
             width: 100%;
             margin-top: 10px;
             border-collapse: collapse;
             table-layout: fixed;
         }
 
-        .tag-print table td {
+        .tag-sheet td {
             padding: 5px;
-            border-bottom: 1px dashed #bdbdbd;
+            border-bottom: 1px dashed #bbb;
+            vertical-align: top;
             word-break: break-word;
             overflow-wrap: anywhere;
-            vertical-align: top;
         }
 
-        .tag-print table td:first-child {
+        .tag-sheet td:first-child {
+            width: 45%;
             font-weight: 700;
-            width: 43%;
-        }
-
-        .tag-print table td:last-child {
-            width: 57%;
         }
 
         /* =========================
-           Responsive
+           تجاوب الهاتف
         ========================= */
 
         @media (max-width: 768px) {
@@ -375,20 +354,14 @@
 
             .container {
                 padding: 16px;
-                border-radius: 10px;
             }
 
             h1 {
                 font-size: 21px;
             }
 
-            .logo-box img {
-                max-width: 105px;
-            }
-
             .form-grid {
                 grid-template-columns: 1fr;
-                gap: 13px;
             }
 
             .actions {
@@ -398,26 +371,11 @@
             button {
                 width: 100%;
                 min-width: 0;
-                font-size: 15px;
-            }
-
-            .signatures {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .signature-box {
-                width: 100%;
-            }
-
-            .tag-print {
-                width: 100%;
-                max-width: 8cm;
             }
         }
 
         /* =========================
-           Print A4
+           الطباعة A4
         ========================= */
 
         @media print {
@@ -434,9 +392,6 @@
                 padding: 0 !important;
                 background: #fff !important;
                 color: #000 !important;
-            }
-
-            body {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -449,25 +404,23 @@
                 display: none !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                background: #fff !important;
             }
 
-            body.printing-invoice #invoiceTemplate {
+            body.print-invoice #invoiceTemplate {
                 display: block !important;
             }
 
-            body.printing-tag #tagTemplate {
+            body.print-tag #tagTemplate {
                 display: block !important;
             }
 
-            .invoice-page {
+            .invoice-sheet {
                 width: 190mm !important;
                 max-width: 190mm !important;
-                min-height: auto !important;
                 margin: 0 auto !important;
                 padding: 0 !important;
                 box-shadow: none !important;
-                border: none !important;
+                page-break-after: auto;
             }
 
             .invoice-logo img {
@@ -475,64 +428,52 @@
                 max-width: 55px !important;
             }
 
-            .invoice-header {
-                margin-bottom: 10px !important;
-            }
-
             .invoice-header h2 {
                 font-size: 20px !important;
-                margin: 2px 0 !important;
             }
 
             .invoice-header p {
-                font-size: 12px !important;
+                font-size: 11.5px !important;
             }
 
             .invoice-title {
                 font-size: 16px !important;
-                margin: 10px 0 !important;
-                padding: 6px 0 !important;
+            }
+
+            .invoice-details {
+                page-break-inside: avoid;
             }
 
             .invoice-details th,
             .invoice-details td {
-                padding: 7px 9px !important;
-                font-size: 13px !important;
+                font-size: 12.5px !important;
+                padding: 7px 8px !important;
                 line-height: 1.5 !important;
             }
 
-            .terms {
-                font-size: 12px !important;
-                margin-top: 16px !important;
-                line-height: 1.65 !important;
+            .invoice-details th {
+                width: 52mm !important;
+                white-space: nowrap !important;
             }
 
+            .terms,
             .signatures {
-                margin-top: 22px !important;
+                page-break-inside: avoid;
             }
 
-            .tag-print {
+            .tag-sheet {
                 width: 8cm !important;
                 max-width: 8cm !important;
-                border: 2px solid #000 !important;
-                padding: 10px !important;
                 margin: 0 auto !important;
-                font-size: 13.5px !important;
-                background: #fff !important;
-                color: #000 !important;
+                padding: 10px !important;
+                border: 2px solid #000 !important;
             }
 
-            .tag-print-header {
-                background-color: #000 !important;
+            .tag-header {
+                background: #000 !important;
                 color: #fff !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-            }
-
-            a,
-            a:visited {
-                color: #000 !important;
-                text-decoration: none !important;
             }
         }
     </style>
@@ -550,7 +491,7 @@
     <div class="form-grid">
         <div class="form-group">
             <label for="refNo">رقم الفاتورة / الوصل:</label>
-            <input type="text" id="refNo" value="1001" autocomplete="off">
+            <input type="text" id="refNo" value="1001">
         </div>
 
         <div class="form-group">
@@ -560,22 +501,22 @@
 
         <div class="form-group">
             <label for="custName">اسم الزبون / الوكيل:</label>
-            <input type="text" id="custName" placeholder="أدخل اسم الزبون" autocomplete="off">
+            <input type="text" id="custName" placeholder="أدخل اسم الزبون">
         </div>
 
         <div class="form-group">
             <label for="phone">رقم الهاتف:</label>
-            <input type="tel" id="phone" placeholder="077xxxxxxx" autocomplete="off">
+            <input type="tel" id="phone" placeholder="077xxxxxxx">
         </div>
 
         <div class="form-group full-width">
             <label for="modelNo">كود المنتج / رقم الموديل:</label>
-            <input type="text" id="modelNo" placeholder="Zio-Exclusive ..." autocomplete="off">
+            <input type="text" id="modelNo" placeholder="Zio-Exclusive ...">
         </div>
 
         <div class="form-group full-width">
             <label for="serialNo">رقم السيريال:</label>
-            <input type="text" id="serialNo" placeholder="SN-123456" autocomplete="off">
+            <input type="text" id="serialNo" placeholder="SN-123456">
         </div>
 
         <div class="form-group full-width">
@@ -588,16 +529,15 @@
     </div>
 
     <div class="actions">
-        <button class="btn-primary" type="button" onclick="printDocument('invoice')">طباعة الفاتورة 📄</button>
-        <button class="btn-secondary" type="button" onclick="printDocument('tag')">طباعة بطاقة الخدمة 🏷️</button>
-        <button class="btn-pdf" type="button" onclick="savePDF()">حفظ الفاتورة PDF 📑</button>
-        <button class="btn-export" type="button" onclick="saveAndExport()">حفظ وتصدير السجل CSV 💾</button>
+        <button type="button" class="btn-primary" onclick="printDocument('invoice')">طباعة الفاتورة 📄</button>
+        <button type="button" class="btn-secondary" onclick="printDocument('tag')">طباعة بطاقة الخدمة 🏷️</button>
+        <button type="button" class="btn-pdf" onclick="savePDF()">حفظ الفاتورة PDF 📑</button>
+        <button type="button" class="btn-export" onclick="saveAndExport()">حفظ وتصدير السجل CSV 💾</button>
     </div>
 </div>
 
-<!-- Invoice Print Template -->
 <div id="invoiceTemplate" class="print-area">
-    <div id="invoicePage" class="invoice-page">
+    <div class="invoice-sheet">
         <div class="invoice-header">
             <div class="invoice-logo">
                 newal.jpg
@@ -653,13 +593,11 @@
             <div class="signatures">
                 <div class="signature-box">
                     توقيع مسؤول الورشة:
-                    <br>
                     <span class="signature-line"></span>
                 </div>
 
                 <div class="signature-box">
                     توقيع الزبون المستلم:
-                    <br>
                     <span class="signature-line"></span>
                 </div>
             </div>
@@ -667,10 +605,9 @@
     </div>
 </div>
 
-<!-- Service Tag Print Template -->
 <div id="tagTemplate" class="print-area">
-    <div class="tag-print">
-        <div class="tag-print-header">
+    <div class="tag-sheet">
+        <div class="tag-header">
             newal Zio EXCLUSIVE
             <br>
             <span>Make your life better...</span>
@@ -709,52 +646,47 @@
     "use strict";
 
     document.addEventListener("DOMContentLoaded", function () {
-        const dateInput = document.getElementById("dateReg");
+        const dateReg = document.getElementById("dateReg");
 
-        if (dateInput && !dateInput.value) {
-            dateInput.valueAsDate = new Date();
+        if (dateReg && !dateReg.value) {
+            dateReg.valueAsDate = new Date();
         }
 
         window.addEventListener("afterprint", resetPrintMode);
     });
 
     function getValue(id) {
-        const element = document.getElementById(id);
-        return element ? element.value.trim() : "";
+        const el = document.getElementById(id);
+        return el ? String(el.value || "").trim() : "";
     }
 
     function setText(id, value) {
-        const element = document.getElementById(id);
-        if (element) {
-            element.textContent = value || "";
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = value || "";
         }
     }
 
-    function formatDate(dateValue) {
-        if (!dateValue) {
-            return "";
-        }
+    function formatDate(value) {
+        if (!value) return "";
 
-        const parts = dateValue.split("-");
-        if (parts.length !== 3) {
-            return dateValue;
-        }
+        const parts = value.split("-");
+        if (parts.length !== 3) return value;
 
         return parts[2] + "/" + parts[1] + "/" + parts[0];
     }
 
     function populateData() {
         const refNo = getValue("refNo");
-        const dateReg = getValue("dateReg");
+        const dateReg = formatDate(getValue("dateReg"));
         const custName = getValue("custName");
         const phone = getValue("phone");
         const modelNo = getValue("modelNo");
         const serialNo = getValue("serialNo");
         const warranty = getValue("warranty");
-        const formattedDate = formatDate(dateReg);
 
         setText("p-ref", refNo);
-        setText("p-date", formattedDate);
+        setText("p-date", dateReg);
         setText("p-name", custName);
         setText("p-phone", phone);
         setText("p-model", modelNo);
@@ -762,15 +694,15 @@
         setText("p-warranty", warranty);
 
         setText("t-ref", refNo);
+        setText("t-date", dateReg);
         setText("t-name", custName);
         setText("t-model", modelNo);
         setText("t-serial", serialNo);
         setText("t-warranty", warranty);
-        setText("t-date", formattedDate);
     }
 
     function resetPrintMode() {
-        document.body.classList.remove("printing-invoice", "printing-tag");
+        document.body.classList.remove("print-invoice", "print-tag");
     }
 
     function printDocument(type) {
@@ -778,9 +710,9 @@
         resetPrintMode();
 
         if (type === "invoice") {
-            document.body.classList.add("printing-invoice");
+            document.body.classList.add("print-invoice");
         } else if (type === "tag") {
-            document.body.classList.add("printing-tag");
+            document.body.classList.add("print-tag");
         } else {
             return;
         }
@@ -789,155 +721,28 @@
             window.print();
         }, 100);
 
-        /*
-            بعض المتصفحات لا تطلق حدث afterprint بشكل صحيح،
-            لذلك نضع احتياط لإزالة وضع الطباعة بعد فترة.
-        */
         setTimeout(resetPrintMode, 1500);
     }
 
-    function cleanFileName(value) {
-        value = (value || "").toString().trim();
-
+    function savePDF() {
         /*
-            إزالة الرموز غير المسموحة في أسماء الملفات:
-            \ / : * ? " < > |
+            هذه الطريقة أفضل للعربي:
+            ستفتح نافذة الطباعة، ومن اختيار الطابعة اختر:
+            Save as PDF أو حفظ كـ PDF.
         */
+        printDocument("invoice");
+    }
+
+    function cleanFileName(value) {
+        value = String(value || "").trim();
         value = value.replace(/[\\/:*?"<>|]/g, "-");
         value = value.replace(/\s+/g, " ");
         value = value.replace(/-+/g, "-");
-        value = value.trim();
-
-        return value;
-    }
-
-    function loadHtml2Pdf(callback) {
-        if (typeof html2pdf !== "undefined") {
-            callback();
-            return;
-        }
-
-        const sources = [
-            "html2pdf.bundle.min.js",
-            "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js",
-            "https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"
-        ];
-
-        let index = 0;
-
-        function tryLoad() {
-            if (index >= sources.length) {
-                alert("تعذر تحميل مكتبة PDF. تأكد من الاتصال بالإنترنت أو ضع ملف html2pdf.bundle.min.js بجانب ملف الصفحة.");
-                return;
-            }
-
-            const script = document.createElement("script");
-            script.src = sources[index];
-            script.async = true;
-
-            script.onload = function () {
-                if (typeof html2pdf !== "undefined") {
-                    callback();
-                } else {
-                    index++;
-                    tryLoad();
-                }
-            };
-
-            script.onerror = function () {
-                index++;
-                tryLoad();
-            };
-
-            document.head.appendChild(script);
-        }
-
-        tryLoad();
-    }
-
-    function waitForImages(element) {
-        const images = Array.from(element.querySelectorAll("img"));
-
-        if (images.length === 0) {
-            return Promise.resolve();
-        }
-
-        return Promise.all(images.map(function (img) {
-            if (img.complete) {
-                return Promise.resolve();
-            }
-
-            return new Promise(function (resolve) {
-                img.onload = resolve;
-                img.onerror = resolve;
-            });
-        }));
-    }
-
-    function savePDF() {
-        loadHtml2Pdf(function () {
-            populateData();
-
-            const invoiceTemplate = document.getElementById("invoiceTemplate");
-            const invoicePage = document.getElementById("invoicePage");
-
-            if (!invoiceTemplate || !invoicePage) {
-                alert("لم يتم العثور على قالب الفاتورة.");
-                return;
-            }
-
-            invoiceTemplate.style.display = "block";
-
-            const refNo = cleanFileName(getValue("refNo")) || "رقم_بدون";
-            const custName = cleanFileName(getValue("custName")) || "اسم_بدون";
-            const pdfFileName = refNo + " - " + custName + ".pdf";
-
-            waitForImages(invoiceTemplate).then(function () {
-                const options = {
-                    margin: [10, 10, 10, 10],
-                    filename: pdfFileName,
-                    image: {
-                        type: "jpeg",
-                        quality: 1
-                    },
-                    html2canvas: {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: true,
-                        backgroundColor: "#ffffff",
-                        scrollX: 0,
-                        scrollY: 0,
-                        windowWidth: invoicePage.scrollWidth
-                    },
-                    jsPDF: {
-                        unit: "mm",
-                        format: "a4",
-                        orientation: "portrait"
-                    },
-                    pagebreak: {
-                        mode: ["css", "legacy"],
-                        avoid: [".invoice-details", ".terms", ".signatures"]
-                    }
-                };
-
-                html2pdf()
-                    .set(options)
-                    .from(invoicePage)
-                    .save()
-                    .then(function () {
-                        invoiceTemplate.style.display = "none";
-                    })
-                    .catch(function () {
-                        invoiceTemplate.style.display = "none";
-                        alert("حدث خطأ أثناء إنشاء ملف PDF.");
-                    });
-            });
-        });
+        return value.trim();
     }
 
     function escapeCSV(value) {
-        value = value || "";
-        value = value.toString().replace(/"/g, '""');
+        value = String(value || "").replace(/"/g, '""');
 
         if (value.includes(",") || value.includes("\n") || value.includes('"')) {
             value = '"' + value + '"';
