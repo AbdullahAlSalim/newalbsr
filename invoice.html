@@ -148,14 +148,20 @@
         }
 
         /* Used only while html2pdf/html2canvas is capturing the invoice.
-           Renders the node off-screen (not display:none) so the library can
-           measure/draw it correctly, without ever flashing on the visible page. */
+           html2canvas needs the node to have real, positive on-page
+           coordinates and real dimensions to render it correctly - an
+           element pushed far off-screen (e.g. left:-9999px) can be measured
+           as zero-size by some canvas engines and produce a blank PDF.
+           So instead we place it at the top of the page, above everything
+           else (z-index), for the brief moment of capture only. */
         .print-area.pdf-render {
             display: block;
             position: fixed;
             top: 0;
-            left: -10000px;
-            z-index: -1;
+            left: 0;
+            width: 190mm;
+            background: #fff;
+            z-index: 999999;
         }
 
         .invoice-page {
@@ -789,8 +795,8 @@
             clearPrintState();
 
             const invoice = document.getElementById('invoiceTemplate');
-            // Render off-screen (not display:none) so html2canvas can measure
-            // and draw it correctly, without it ever becoming visible on the page.
+            // Bring it fully on-screen (top, above everything) just for the
+            // capture - guarantees html2canvas measures/renders it correctly.
             invoice.classList.add('pdf-render');
 
             const refNo = cleanFileName(document.getElementById('refNo').value) || 'رقم_بدون';
