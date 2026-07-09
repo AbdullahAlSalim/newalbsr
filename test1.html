@@ -143,11 +143,11 @@
         }
 
         .invoice-page {
-            width: 210mm;
-            height: 297mm;
+            width: 100%;
+            max-width: 190mm;
             background: #fff;
             margin: 0 auto;
-            padding: 10mm;
+            padding: 20px;
             direction: rtl;
             text-align: right;
             box-sizing: border-box;
@@ -372,7 +372,7 @@
 
             .invoice-page {
                 width: 100%;
-                height: auto;
+                max-width: 100%;
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
@@ -741,6 +741,11 @@
             const pdfFileName = refNo + ' - ' + custName + '.pdf';
 
             waitForImages(invoice).then(function () {
+                // تعديل مؤقت للـ direction لحل مشكلة القطع
+                const originalDirection = invoice.style.direction;
+                invoice.style.direction = 'ltr';
+                invoice.style.textAlign = 'left';
+
                 const options = {
                     margin: [10, 10, 10, 10],
                     filename: pdfFileName,
@@ -749,12 +754,14 @@
                         quality: 1
                     },
                     html2canvas: {
-                        scale: 1,
+                        scale: 2,
                         useCORS: true,
                         allowTaint: true,
                         backgroundColor: '#ffffff',
+                        windowWidth: 800,
+                        windowHeight: 1100,
                         scrollX: 0,
-                        scrollY: 0
+                        scrollY: -window.scrollY
                     },
                     jsPDF: {
                         unit: 'mm',
@@ -771,9 +778,14 @@
                     .from(invoice)
                     .save()
                     .then(function () {
+                        // إعادة الـ direction الأصلي
+                        invoice.style.direction = originalDirection;
+                        invoice.style.textAlign = 'right';
                         invoice.style.display = 'none';
                     })
                     .catch(function () {
+                        invoice.style.direction = originalDirection;
+                        invoice.style.textAlign = 'right';
                         invoice.style.display = 'none';
                         alert('حدث خطأ أثناء إنشاء ملف PDF.');
                     });
