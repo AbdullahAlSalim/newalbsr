@@ -147,7 +147,7 @@
             max-width: 190mm;
             background: #fff;
             margin: 0 auto;
-            padding: 0;
+            padding: 15mm;
             direction: rtl;
             text-align: right;
             box-sizing: border-box;
@@ -197,7 +197,7 @@
         .invoice-details {
             width: 100%;
             border-collapse: collapse;
-            table-layout: fixed;
+            table-layout: auto;
             margin-top: 10px;
             direction: rtl;
         }
@@ -210,19 +210,21 @@
             line-height: 1.6;
             vertical-align: top;
             text-align: right;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
             word-break: break-word;
-            overflow-wrap: anywhere;
         }
 
         .invoice-details th {
-            width: 34%;
+            width: auto;
+            min-width: 120px;
             background: #f2f2f2;
             color: #000;
             font-weight: bold;
         }
 
         .invoice-details td {
-            width: 66%;
+            width: auto;
             color: #000;
             min-height: 28px;
         }
@@ -374,7 +376,7 @@
                 width: 100%;
                 max-width: 100%;
                 margin: 0;
-                padding: 0;
+                padding: 15mm;
                 box-sizing: border-box;
             }
 
@@ -393,7 +395,7 @@
 
             .invoice-details {
                 width: 100%;
-                table-layout: fixed;
+                table-layout: auto;
             }
 
             .invoice-details th,
@@ -401,6 +403,7 @@
                 padding: 7px 9px;
                 font-size: 13px;
                 word-wrap: break-word;
+                overflow-wrap: break-word;
             }
 
             .terms {
@@ -748,7 +751,7 @@
 
             waitForImages(invoice).then(function () {
                 const options = {
-                    margin: [10, 10, 10, 10], // إضافة هوامش متساوية للملف
+                    margin: [10, 10, 10, 10],
                     filename: pdfFileName,
                     image: {
                         type: 'jpeg',
@@ -759,7 +762,7 @@
                         useCORS: true,
                         allowTaint: true,
                         backgroundColor: '#ffffff',
-                        windowWidth: 794, // قفل أبعاد الصفحة لمطابقة مقاس A4 لعدم تشوه الملف مهما كان حجم الشاشة
+                        windowWidth: 794,
                         scrollX: 0,
                         scrollY: 0
                     },
