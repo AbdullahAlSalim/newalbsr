@@ -19,12 +19,18 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
             color: var(--text);
             margin: 0;
             padding: 20px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
         .container {
@@ -139,6 +145,17 @@
             display: none;
             background: #fff;
             color: #000;
+        }
+
+        /* Used only while html2pdf/html2canvas is capturing the invoice.
+           Renders the node off-screen (not display:none) so the library can
+           measure/draw it correctly, without ever flashing on the visible page. */
+        .print-area.pdf-render {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: -10000px;
+            z-index: -1;
         }
 
         .invoice-page {
@@ -267,6 +284,8 @@
             margin: 0 auto;
             font-size: 14px;
             background: #fff;
+            direction: ltr;
+            text-align: left;
         }
 
         .tag-print-header {
@@ -287,6 +306,10 @@
             padding: 5px;
             border-bottom: 1px dashed #ccc;
             word-break: break-word;
+        }
+
+        .tag-print table td {
+            text-align: left;
         }
 
         .tag-print table td:first-child {
@@ -349,18 +372,33 @@
                 margin: 10mm;
             }
 
-            body {
+            html, body {
                 background: #fff;
                 padding: 0;
                 margin: 0;
+                height: auto;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
 
             .no-print {
                 display: none !important;
             }
 
+            /* Nothing prints unless the body carries one of these state
+               classes (set briefly by printDocument() before window.print()).
+               This keeps both templates safely hidden on screen at all times,
+               eliminating any flash of the invoice/tag on the visible page. */
             .print-area {
-                display: block;
+                display: none !important;
+            }
+
+            body.printing-invoice #invoiceTemplate,
+            body.printing-tag #tagTemplate {
+                display: block !important;
                 padding: 0;
                 margin: 0;
                 background: #fff;
@@ -386,14 +424,38 @@
                 font-size: 12px;
             }
 
+            .invoice-details {
+                page-break-inside: auto;
+            }
+
+            .invoice-details tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
             .invoice-details th,
             .invoice-details td {
                 padding: 7px 9px;
                 font-size: 13px;
+                background: #f2f2f2;
+            }
+
+            .invoice-details td {
+                background: #fff;
+            }
+
+            .invoice-header,
+            .invoice-title {
+                page-break-after: avoid;
             }
 
             .terms {
                 font-size: 12px;
+                page-break-inside: avoid;
+            }
+
+            .signatures {
+                page-break-inside: avoid;
             }
 
             .tag-print {
@@ -410,8 +472,6 @@
                 text-align: center;
                 padding: 5px;
                 font-weight: bold;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
             }
         }
     </style>
@@ -423,42 +483,42 @@
     <h1>نظام الصيانة - مركز نيوال (البصرة)</h1>
 
     <div class="logo-box">
-        <img src="newal.jpg" alt="شعار مركز صيانة نيوال">
+        <img src="newal.jpg" alt="شعار مركز صيانة نيوال" onerror="this.style.display='none'">
     </div>
 
     <div class="form-grid">
         <div class="form-group">
-            <label>رقم الفاتورة / الوصل:</label>
+            <label for="refNo">رقم الفاتورة / الوصل:</label>
             <input type="text" id="refNo" value="1001">
         </div>
 
         <div class="form-group">
-            <label>تاريخ تسجيل الخدمة:</label>
+            <label for="dateReg">تاريخ تسجيل الخدمة:</label>
             <input type="date" id="dateReg">
         </div>
 
         <div class="form-group">
-            <label>اسم الزبون / الوكيل:</label>
+            <label for="custName">اسم الزبون / الوكيل:</label>
             <input type="text" id="custName" placeholder="أدخل اسم الزبون">
         </div>
 
         <div class="form-group">
-            <label>رقم الهاتف:</label>
+            <label for="phone">رقم الهاتف:</label>
             <input type="text" id="phone" placeholder="077xxxxxxx">
         </div>
 
         <div class="form-group full-width">
-            <label>كود المنتج / رقم الموديل:</label>
+            <label for="modelNo">كود المنتج / رقم الموديل:</label>
             <input type="text" id="modelNo" placeholder="Zio-Exclusive ...">
         </div>
 
         <div class="form-group full-width">
-            <label>رقم السيريال:</label>
+            <label for="serialNo">رقم السيريال:</label>
             <input type="text" id="serialNo" placeholder="SN-123456">
         </div>
 
         <div class="form-group full-width">
-            <label>حالة الضمان:</label>
+            <label for="warranty">حالة الضمان:</label>
             <select id="warranty">
                 <option value="ضمان">ضمان</option>
                 <option value="خارج الضمان">خارج الضمان</option>
@@ -478,7 +538,7 @@
     <div class="invoice-page">
         <div class="invoice-header">
             <div class="invoice-logo">
-                <img src="newal.jpg" alt="شعار مركز صيانة نيوال">
+                <img src="newal.jpg" alt="شعار مركز صيانة نيوال" onerror="this.style.display='none'">
             </div>
 
             <h2>مركز صيانة نيوال</h2>
@@ -624,27 +684,29 @@
         document.getElementById('t-date').innerText = dateReg || '';
     }
 
-    function hidePrintTemplates() {
-        document.getElementById('invoiceTemplate').style.display = 'none';
-        document.getElementById('tagTemplate').style.display = 'none';
+    function clearPrintState() {
+        document.body.classList.remove('printing-invoice', 'printing-tag');
     }
 
+    // The invoice/tag templates stay hidden on screen at all times (.print-area
+    // has display:none). We only ever reveal them through a body class that is
+    // scoped inside @media print, so nothing ever flashes on the visible page -
+    // it only appears in the actual print output / print preview.
     function printDocument(type) {
         populateData();
-        hidePrintTemplates();
+        clearPrintState();
 
         if (type === 'invoice') {
-            document.getElementById('invoiceTemplate').style.display = 'block';
+            document.body.classList.add('printing-invoice');
         } else if (type === 'tag') {
-            document.getElementById('tagTemplate').style.display = 'block';
+            document.body.classList.add('printing-tag');
         }
 
         window.print();
-
-        setTimeout(function () {
-            hidePrintTemplates();
-        }, 500);
     }
+
+    // Fallback cleanup for browsers that don't fire 'afterprint' reliably.
+    window.addEventListener('afterprint', clearPrintState);
 
     function cleanFileName(value) {
         value = (value || '').toString().trim();
@@ -724,10 +786,12 @@
     function savePDF() {
         loadHtml2Pdf(function () {
             populateData();
-            hidePrintTemplates();
+            clearPrintState();
 
             const invoice = document.getElementById('invoiceTemplate');
-            invoice.style.display = 'block';
+            // Render off-screen (not display:none) so html2canvas can measure
+            // and draw it correctly, without it ever becoming visible on the page.
+            invoice.classList.add('pdf-render');
 
             const refNo = cleanFileName(document.getElementById('refNo').value) || 'رقم_بدون';
             const custName = cleanFileName(document.getElementById('custName').value) || 'اسم_بدون';
@@ -767,10 +831,10 @@
                     .from(invoice)
                     .save()
                     .then(function () {
-                        invoice.style.display = 'none';
+                        invoice.classList.remove('pdf-render');
                     })
                     .catch(function () {
-                        invoice.style.display = 'none';
+                        invoice.classList.remove('pdf-render');
                         alert('حدث خطأ أثناء إنشاء ملف PDF.');
                     });
             });
