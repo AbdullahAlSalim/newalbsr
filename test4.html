@@ -743,8 +743,7 @@
             waitForImages(invoice).then(function () {
                 // تعديل مؤقت للـ direction لحل مشكلة القطع
                 const originalDirection = invoice.style.direction;
-                invoice.style.direction = 'ltr';
-                invoice.style.textAlign = 'left';
+                
 
                 const options = {
                     margin: [10, 10, 10, 10],
@@ -758,7 +757,7 @@
                         useCORS: true,
                         allowTaint: true,
                         backgroundColor: '#ffffff',
-                        windowWidth: 800,
+                        windowWidth: invoice.scrollWidth,
                         windowHeight: 1100,
                         scrollX: 0,
                         scrollY: -window.scrollY
@@ -778,14 +777,10 @@
                     .from(invoice)
                     .save()
                     .then(function () {
-                        // إعادة الـ direction الأصلي
-                        invoice.style.direction = originalDirection;
-                        invoice.style.textAlign = 'right';
+                        
                         invoice.style.display = 'none';
                     })
                     .catch(function () {
-                        invoice.style.direction = originalDirection;
-                        invoice.style.textAlign = 'right';
                         invoice.style.display = 'none';
                         alert('حدث خطأ أثناء إنشاء ملف PDF.');
                     });
