@@ -143,16 +143,14 @@
         }
 
         .invoice-page {
-            width: 100%;
-            max-width: 210mm;
+            width: 210mm;
             height: 297mm;
             background: #fff;
             margin: 0 auto;
-            padding: 15mm;
+            padding: 10mm;
             direction: rtl;
             text-align: right;
             box-sizing: border-box;
-            overflow: hidden;
         }
 
         .invoice-header {
@@ -351,7 +349,7 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 0;
+                margin: 10mm;
             }
 
             body {
@@ -370,17 +368,14 @@
                 margin: 0;
                 background: #fff;
                 width: 100%;
-                page-break-after: always;
             }
 
             .invoice-page {
                 width: 100%;
-                height: 297mm;
-                max-width: 100%;
+                height: auto;
                 margin: 0;
-                padding: 15mm;
+                padding: 0;
                 box-sizing: border-box;
-                page-break-inside: avoid;
             }
 
             .invoice-logo img {
@@ -747,18 +742,17 @@
 
             waitForImages(invoice).then(function () {
                 const options = {
-                    margin: [0, 0, 0, 0],
+                    margin: [10, 10, 10, 10],
                     filename: pdfFileName,
                     image: {
                         type: 'jpeg',
-                        quality: 0.98
+                        quality: 1
                     },
                     html2canvas: {
-                        scale: 2,
+                        scale: 1,
                         useCORS: true,
                         allowTaint: true,
                         backgroundColor: '#ffffff',
-                        windowWidth: 794,
                         scrollX: 0,
                         scrollY: 0
                     },
@@ -768,7 +762,7 @@
                         orientation: 'portrait'
                     },
                     pagebreak: {
-                        mode: ['avoid-all', 'css', 'legacy']
+                        mode: ['css', 'legacy']
                     }
                 };
 
