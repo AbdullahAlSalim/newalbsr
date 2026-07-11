@@ -180,66 +180,66 @@
             max-width: 190mm;
             background: #fff;
             margin: 0 auto;
-            padding: 20px;
+            padding: 8px 12px;
             text-align: left;
             box-sizing: border-box;
         }
 
         .invoice-header {
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
 
         .invoice-logo {
             text-align: center;
-            margin-bottom: 6px;
+            margin-bottom: 3px;
         }
 
         .invoice-logo img {
-            width: 60px;
-            max-width: 60px;
+            width: 40px;
+            max-width: 40px;
             height: auto;
             display: inline-block;
         }
 
         .invoice-header h2 {
-            margin: 3px 0;
+            margin: 1px 0;
             color: var(--primary);
-            font-size: 19px;
-            line-height: 1.4;
+            font-size: 15px;
+            line-height: 1.25;
         }
 
         .invoice-header p {
-            margin: 2px 0;
-            font-size: 12px;
-            line-height: 1.4;
+            margin: 1px 0;
+            font-size: 9.5px;
+            line-height: 1.25;
         }
 
         .invoice-title {
             text-align: center;
             color: #000;
-            margin: 10px 0;
-            font-size: 15.5px;
+            margin: 5px 0;
+            font-size: 12.5px;
             font-weight: bold;
             border-top: 1px solid #000;
             border-bottom: 1px solid #000;
-            padding: 6px 0;
-            line-height: 1.5;
+            padding: 3px 0;
+            line-height: 1.3;
         }
 
         .invoice-details {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         .invoice-details th,
         .invoice-details td {
             border: 1px solid #000;
-            padding: 8px 10px;
-            font-size: 12.5px;
-            line-height: 1.5;
+            padding: 3px 6px;
+            font-size: 10.5px;
+            line-height: 1.25;
             vertical-align: top;
             text-align: left;
             word-break: normal;
@@ -256,28 +256,29 @@
         .invoice-details td {
             width: 66%;
             color: #000;
-            min-height: 28px;
+            min-height: 18px;
         }
 
         .bi-label .ar {
             display: block;
             font-weight: normal;
-            font-size: 0.92em;
+            font-size: 0.88em;
             color: #333;
             direction: rtl;
             text-align: right;
         }
 
         .terms {
-            margin-top: 18px;
-            font-size: 12px;
-            line-height: 1.6;
+            margin-top: 8px;
+            font-size: 9px;
+            line-height: 1.3;
             color: #000;
         }
 
         .terms-title {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
+            font-size: 10px;
         }
 
         .terms-title .ar {
@@ -288,12 +289,12 @@
         }
 
         .terms ul {
-            margin: 5px 0 0 0;
-            padding-left: 20px;
+            margin: 3px 0 0 0;
+            padding-left: 16px;
         }
 
         .terms li {
-            margin-bottom: 8px;
+            margin-bottom: 3px;
         }
 
         .terms li .ar {
@@ -301,20 +302,20 @@
             direction: rtl;
             text-align: right;
             font-size: 0.95em;
-            margin-top: 2px;
+            margin-top: 0px;
         }
 
         .signatures {
             display: flex;
             justify-content: space-between;
-            gap: 30px;
-            margin-top: 25px;
+            gap: 20px;
+            margin-top: 12px;
         }
 
         .signature-box {
             width: 50%;
             text-align: center;
-            font-size: 12px;
+            font-size: 9.5px;
             color: #000;
         }
 
@@ -383,7 +384,7 @@
 
         @media print {
             *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-            @page { size: A4 portrait; margin: 10mm; }
+            @page { size: A4 portrait; margin: 6mm; }
             body { background: #fff; padding: 0; margin: 0; }
             .no-print { display: none !important; }
             .print-area { display: block; padding: 0; margin: 0; background: #fff; width: 100%; }
@@ -469,11 +470,11 @@
                 <img src="https://abdullahalsalim.github.io/newalbsr/newal.jpg" crossorigin="anonymous" alt="Newal Maintenance Center Logo - شعار مركز صيانة نيوال">
             </div>
             <h2>Newal Maintenance Center<br><span style="direction:rtl; display:inline-block; font-size:0.85em;">مركز صيانة نيوال</span></h2>
-            <p>NEWAL SERVICE CENTER</p>
-            <p>Basra - Al-Watan Street <span style="direction:rtl; display:inline-block;">— البصرة - شارع الوطن</span> | 07734855588 | service.basra@newal.com</p>
+            <p style="font-size: 9px;">NEWAL SERVICE CENTER</p>
+            <p style="font-size: 9px;">Basra - Al-Watan Street <span style="direction:rtl; display:inline-block;">— البصرة - شارع الوطن</span> | 07734855588 | service.basra@newal.com</p>
         </div>
 
-        <div class="invoice-title">Invoice / Maintenance Receipt<br><span style="direction:rtl; display:inline-block;">فاتورة / وصل استلام صيانة</span></div>
+        <div class="invoice-title">Invoice / Maintenance Receipt<br><span style="direction:rtl; display:inline-block; font-size:0.9em;">فاتورة / وصل استلام صيانة</span></div>
 
         <table class="invoice-details">
             <tr>
@@ -494,13 +495,13 @@
             </tr>
         </table>
 
-        <h4 style="margin: 15px 0 5px 0; color: var(--primary);">Product Details: <span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.9em;">تفاصيل المنتجات:</span></h4>
+        <h4 style="margin: 6px 0 3px 0; color: var(--primary); font-size: 11px;">Product Details: <span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.9em;">تفاصيل المنتجات:</span></h4>
         <table class="invoice-details" style="text-align: center;">
             <thead>
                 <tr>
-                    <th style="width: 40%; text-align: center;">Product Code / Model<br><span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.9em;">كود المنتج / الموديل</span></th>
-                    <th style="width: 40%; text-align: center;">Serial Number<br><span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.9em;">رقم السيريال</span></th>
-                    <th style="width: 20%; text-align: center;">Warranty<br><span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.9em;">الضمان</span></th>
+                    <th style="width: 40%; text-align: center;">Product Code / Model<br><span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.85em;">كود المنتج / الموديل</span></th>
+                    <th style="width: 40%; text-align: center;">Serial Number<br><span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.85em;">رقم السيريال</span></th>
+                    <th style="width: 20%; text-align: center;">Warranty<br><span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.85em;">الضمان</span></th>
                 </tr>
             </thead>
             <tbody id="p-products-list">
@@ -594,9 +595,9 @@
             // Build the invoice table (bilingual warranty label)
             invoiceProductsHTML += `
                 <tr>
-                    <td style="text-align: center;">${m}</td>
-                    <td style="text-align: center;">${s}</td>
-                    <td style="text-align: center;">${w.en}<br><span style="direction:rtl; display:inline-block; font-size:0.9em; color:#444;">${w.ar}</span></td>
+                    <td style="text-align: center; font-size: 10.5px;">${m}</td>
+                    <td style="text-align: center; font-size: 10.5px;">${s}</td>
+                    <td style="text-align: center; font-size: 10.5px;">${w.en}<br><span style="direction:rtl; display:inline-block; font-size:0.85em; color:#444;">${w.ar}</span></td>
                 </tr>
             `;
 
