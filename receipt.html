@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وصل تسليم منتجات - نيوآل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --bg-color: #f5f6fa;
+            --text-color: #333;
+            --border-color: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .receipt-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-top: 8px solid var(--primary-color);
+            border-radius: 8px;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .company-info h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 28px;
+        }
+
+        .company-info p {
+            margin: 5px 0 0 0;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .receipt-title {
+            text-align: left;
+        }
+
+        .receipt-title h2 {
+            margin: 0;
+            font-size: 32px;
+            color: var(--secondary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 4px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .info-value {
+            font-weight: 700;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            -webkit-print-color-adjust: exact;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Terms & Conditions */
+        .terms {
+            background: #fcfcfc;
+            border-right: 4px solid var(--accent-color);
+            padding: 15px 20px;
+            margin-bottom: 40px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .terms h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .terms ul {
+            margin: 0;
+            padding-right: 20px;
+        }
+
+        /* Signatures */
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            margin-bottom: 30px;
+        }
+
+        .signature-box {
+            text-align: center;
+            width: 250px;
+        }
+
+        .signature-line {
+            border-top: 1px solid var(--text-color);
+            margin-top: 50px;
+            padding-top: 10px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d35400; /* لون يشابه شعار نيوآل في الصورة */
+            margin-bottom: 10px;
+            display: inline-block;
+            transform: rotate(-90deg); /* تدوير الشعار كما في الصورة */
+        }
+
+        /* Print Button */
+        .btn-print {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: background 0.3s;
+        }
+
+        .btn-print:hover {
+            background-color: #2980b9;
+        }
+
+        /* Print Media Query */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .receipt-container {
+                box-shadow: none;
+                border: none;
+                max-width: 100%;
+                padding: 0;
+            }
+            .btn-print {
+                display: none; /* إخفاء زر الطباعة عند الطباعة */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="btn-print" onclick="window.print()">🖨️ طباعة الوصل</button>
+
+    <div class="receipt-container">
+        <div class="header">
+            <div class="company-info">
+                <h1>مركز صيانة نيوآل</h1>
+                <p>Newal Service Center</p>
+            </div>
+            <div class="receipt-title">
+                <h2>Service</h2>
+                <p style="margin:0; font-weight:bold; color:#7f8c8d;">وصل تسليم (توصيل مركبات)</p>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-box">
+                <div class="info-row">
+                    <span class="info-label">اسم الوكيل أو الزبون:</span>
+                    <span class="info-value">ميثاق أبو سجاد</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">رقم الهاتف:</span>
+                    <span class="info-value">0773 465 56 99</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">العنوان:</span>
+                    <span class="info-value">الزبير</span>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-row">
+                    <span class="info-label">تاريخ الإصدار (Issue Date):</span>
+                    <span class="info-value">07/07/2026</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">رقم المرجع (Ref):</span>
+                    <span class="info-value">1024</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">اسم السائق / المندوب:</span>
+                    <span class="info-value">.................</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">رقم المركبة:</span>
+                    <span class="info-value">.................</span>
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="10%">العدد</th>
+                    <th width="20%">كود المنتج</th>
+                    <th width="20%">الحالة</th>
+                    <th width="50%">ملاحظات المنتج / التوصيل</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>FAN-349</td>
+                    <td>تم التسليم</td>
+                    <td>مروحة جدارية</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="terms">
+            <h4>شروط وأحكام الصيانة والتسليم:</h4>
+            <ul>
+                <li>الشركة لن تسلم أي منتج إلا بوجود الوصل الورقي.</li>
+                <li>يسقط الضمان إذا تم فتح المنتج خارج الورشة المركزية أو أحد الورش المعتمدة.</li>
+                <li>مدة الضمان سنة واحدة لا يشمل حالات الكسر أو سوء الاستخدام.</li>
+                <li>يسقط الحق باستلام المنتج بعد مرور اسبوعين على اكمال صيانته.</li>
+                <li><strong>يقر المستلم بتسلم البضاعة بحالة جيدة وخالية من أي كسور ظاهرية.</strong></li>
+            </ul>
+        </div>
+
+        <div class="signatures">
+            <div class="signature-box">
+                <div class="signature-line">توقيع مسؤول الورشة / السائق</div>
+                <span style="font-family: Tahoma; font-style: italic; color: blue;">منقذ وحيد</span>
+            </div>
+            
+            <div class="signature-box">
+                <div class="signature-line">توقيع واستلام الزبون</div>
+                <span style="font-family: Tahoma; font-style: italic; color: blue;">سجاد ميثاق</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div style="margin-bottom: 15px;">Make all checks payable to مركز صيانة نيوآل</div>
+            <div style="display: flex; justify-content: center; gap: 20px; align-items: center; font-weight: bold;">
+                <span>📍 البصرة - شارع الوطن</span>
+                <span>|</span>
+                <span>📞 07734855588</span>
+                <span>|</span>
+                <span>✉️ service.basra@newal.com</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
