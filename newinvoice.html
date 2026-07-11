@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة صيانة نيوال
-    </title>
+    <title>نظام إدارة صيانة نيوال</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
@@ -291,11 +290,11 @@
             width: 8cm;
             border: 2px solid #000;
             padding: 10px;
-            margin: 0 auto 20px auto; /* مسافة بين التاكات المتعددة */
+            margin: 0 auto 20px auto; 
             font-size: 14px;
             background: #fff;
             box-sizing: border-box;
-            page-break-inside: avoid; /* منع قسمة التاك الواحد بين صفحتين عند الطباعة */
+            page-break-inside: avoid; 
         }
 
         .tag-print-header {
@@ -599,93 +598,9 @@
         return value;
     }
 
-    function loadHtml2Pdf(callback) {
-        if (typeof html2pdf !== 'undefined') {
-            callback();
-            return;
-        }
-
-        const sources = [
-            'html2pdf.bundle.min.js',
-            'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
-            'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js'
-        ];
-
-        let index = 0;
-
-        function tryLoad() {
-            if (index >= sources.length) {
-                alert('تعذر تحميل مكتبة PDF. تأكد من الاتصال بالإنترنت.');
-                return;
-            }
-            const script = document.createElement('script');
-            script.src = sources[index];
-            script.async = true;
-            script.onload = function () {
-                if (typeof html2pdf !== 'undefined') {
-                    callback();
-                } else {
-                    index++;
-                    tryLoad();
-                }
-            };
-            script.onerror = function () {
-                index++;
-                tryLoad();
-            };
-            document.head.appendChild(script);
-        }
-        tryLoad();
-    }
-
-    function waitForImages(element) {
-        const images = Array.from(element.querySelectorAll('img'));
-        if (images.length === 0) return Promise.resolve();
-        return Promise.all(images.map(function (img) {
-            if (img.complete) return Promise.resolve();
-            return new Promise(function (resolve) {
-                img.onload = resolve;
-                img.onerror = resolve;
-            });
-        }));
-    }
-
     function savePDF() {
-        loadHtml2Pdf(function () {
-            populateData();
-            hidePrintTemplates();
-
-            const invoice = document.getElementById('invoiceTemplate');
-            invoice.style.display = 'block';
-
-            const refNo = cleanFileName(document.getElementById('refNo').value) || 'رقم_بدون';
-            const custName = cleanFileName(document.getElementById('custName').value) || 'اسم_بدون';
-            const pdfFileName = refNo + ' - ' + custName + '.pdf';
-
-            waitForImages(invoice).then(function () {
-                const options = {
-                    margin: [10, 10, 10, 10],
-                    filename: pdfFileName,
-                    image: { type: 'jpeg', quality: 1 },
-                    html2canvas: {
-                        scale: 3,
-                        useCORS: true,
-                        allowTaint: false,
-                        backgroundColor: '#ffffff',
-                        windowWidth: invoice.scrollWidth,
-                        windowHeight: invoice.scrollHeight
-                    },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
-
-                html2pdf().set(options).from(invoice).save().then(function () {
-                    invoice.style.display = 'none';
-                }).catch(function () {
-                    invoice.style.display = 'none';
-                    alert('حدث خطأ أثناء إنشاء ملف PDF.');
-                });
-            });
-        });
+        alert('لضمان ظهور اللغة العربية والتنسيق بشكل سليم 100%، سيتم فتح نافذة الطباعة.\\n\\nيرجى تغيير خيار "الطابعة" (Destination) إلى "حفظ بتنسيق PDF" (Save as PDF) ثم النقر على حفظ.');
+        printDocument('invoice');
     }
 
     function escapeCSV(value) {
