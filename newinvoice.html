@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة صيانة نيوال
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1B365D;
+            --secondary: #F2F5F8;
+            --text: #333;
+            --green: #27ae60;
+            --orange: #e67e22;
+            --red: #c0392b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Cairo","Segoe UI",Tahoma,sans-serif;
+            background-color: #f4f7f6;
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        .logo-box {
+            text-align: center;
+            margin: 10px 0 20px 0;
+        }
+
+        .logo-box img {
+            max-width: 120px;
+            width: 100%;
+            height: auto;
+            display: inline-block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        input,
+        select {
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 15px;
+            width: 100%;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        /* تنسيقات جدول المنتجات في نموذج الإدخال */
+        .products-table-input {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        .products-table-input th, .products-table-input td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .products-table-input th {
+            background: var(--secondary);
+            color: var(--primary);
+        }
+
+        .btn-delete-row {
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-add-item {
+            background-color: var(--green);
+            color: #fff;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+
+        .btn-primary { background-color: var(--primary); color: #fff; }
+        .btn-primary:hover { background-color: #122540; }
+        .btn-secondary { background-color: var(--green); color: #fff; }
+        .btn-export { background-color: var(--orange); color: #fff; }
+        .btn-pdf { background-color: var(--red); color: #fff; }
+
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .print-area {
+            display: none;
+            background: #fff;
+            color: #000;
+            width: 100%;
+        }
+
+        .invoice-page {
+            width: 100%;
+            max-width: 190mm;
+            background: #fff;
+            margin: 0 auto;
+            padding: 20px;
+            direction: rtl;
+            text-align: right;
+            box-sizing: border-box;
+        }
+
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .invoice-logo {
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        .invoice-logo img {
+            width: 60px;
+            max-width: 60px;
+            height: auto;
+            display: inline-block;
+        }
+
+        .invoice-header h2 {
+            margin: 3px 0;
+            color: var(--primary);
+            font-size: 21px;
+            line-height: 1.3;
+        }
+
+        .invoice-header p {
+            margin: 2px 0;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .invoice-title {
+            text-align: center;
+            color: #000;
+            margin: 10px 0;
+            font-size: 17px;
+            font-weight: bold;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+            padding: 6px 0;
+        }
+
+        .invoice-details {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-top: 10px;
+            direction: rtl;
+        }
+
+        .invoice-details th,
+        .invoice-details td {
+            border: 1px solid #000;
+            padding: 8px 10px;
+            font-size: 13.5px;
+            line-height: 1.6;
+            vertical-align: top;
+            text-align: right;
+            word-break: normal;
+            overflow-wrap: break-word;
+        }
+
+        .invoice-details th {
+            width: 34%;
+            background: #f2f2f2;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .invoice-details td {
+            width: 66%;
+            color: #000;
+            min-height: 28px;
+        }
+
+        .terms {
+            margin-top: 18px;
+            font-size: 12.5px;
+            line-height: 1.7;
+            color: #000;
+        }
+
+        .terms-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .terms ul {
+            margin: 5px 0 0 0;
+            padding-right: 20px;
+        }
+
+        .terms li {
+            margin-bottom: 3px;
+        }
+
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 25px;
+        }
+
+        .signature-box {
+            width: 50%;
+            text-align: center;
+            font-size: 12.5px;
+            color: #000;
+        }
+
+        .tag-print {
+            width: 8cm;
+            border: 2px solid #000;
+            padding: 10px;
+            margin: 0 auto 20px auto; /* مسافة بين التاكات المتعددة */
+            font-size: 14px;
+            background: #fff;
+            box-sizing: border-box;
+            page-break-inside: avoid; /* منع قسمة التاك الواحد بين صفحتين عند الطباعة */
+        }
+
+        .tag-print-header {
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding: 5px;
+            font-weight: bold;
+        }
+
+        .tag-print table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        .tag-print table td {
+            padding: 5px;
+            border-bottom: 1px dashed #ccc;
+            word-break: normal;
+        }
+
+        .tag-print table td:first-child {
+            font-weight: bold;
+            width: 45%;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .actions { flex-direction: column; }
+            button { width: 100%; font-size: 15px; }
+            .signatures { flex-direction: column; gap: 15px; }
+            .signature-box { width: 100%; }
+            .products-table-input th, .products-table-input td { font-size: 12px; padding: 4px; }
+        }
+
+        @media print {
+            *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+            @page { size: A4 portrait; margin: 10mm; }
+            body { background: #fff; padding: 0; margin: 0; }
+            .no-print { display: none !important; }
+            .print-area { display: block; padding: 0; margin: 0; background: #fff; width: 100%; }
+            .invoice-page { width: 100%; max-width: 100%; margin: 0; padding: 0; box-sizing: border-box; }
+            .tag-print-header { background-color: #000 !important; color: #fff !important; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container no-print">
+    <h1>نظام الصيانة - مركز نيوال (البصرة)</h1>
+
+    <div class="logo-box">
+        <img src="https://abdullahalsalim.github.io/newalbsr/newal.jpg" crossorigin="anonymous" alt="شعار مركز صيانة نيوال">
+    </div>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label>رقم الفاتورة / الوصل:</label>
+            <input type="text" id="refNo" value="1001">
+        </div>
+
+        <div class="form-group">
+            <label>تاريخ تسجيل الخدمة:</label>
+            <input type="date" id="dateReg">
+        </div>
+
+        <div class="form-group">
+            <label>اسم الزبون / الوكيل:</label>
+            <input type="text" id="custName" placeholder="أدخل اسم الزبون">
+        </div>
+
+        <div class="form-group">
+            <label>رقم الهاتف:</label>
+            <input type="text" id="phone" placeholder="077xxxxxxx">
+        </div>
+
+        <div class="form-group full-width">
+            <label>المنتجات المستلمة للصيانة:</label>
+            <table class="products-table-input" id="productsTable">
+                <thead>
+                    <tr>
+                        <th width="35%">كود المنتج / الموديل</th>
+                        <th width="35%">رقم السيريال</th>
+                        <th width="20%">الضمان</th>
+                        <th width="10%">إجراء</th>
+                    </tr>
+                </thead>
+                <tbody id="productsBody">
+                    <tr>
+                        <td><input type="text" class="item-model" placeholder="Zio-Exclusive ..."></td>
+                        <td><input type="text" class="item-serial" placeholder="SN-123456"></td>
+                        <td>
+                            <select class="item-warranty">
+                                <option value="ضمان">ضمان</option>
+                                <option value="خارج الضمان">خارج الضمان</option>
+                            </select>
+                        </td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="text-align: right;">
+                <button type="button" class="btn-add-item" onclick="addProductRow()">➕ إضافة منتج آخر</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="btn-primary" onclick="printDocument('invoice')">طباعة الفاتورة 📄</button>
+        <button class="btn-secondary" onclick="printDocument('tag')">طباعة بطاقة الخدمة 🏷️</button>
+        <button class="btn-pdf" onclick="savePDF()">حفظ الفاتورة PDF 📑</button>
+        <button class="btn-export" onclick="saveAndExport()">حفظ وتصدير السجل CSV 💾</button>
+    </div>
+</div>
+
+<div id="invoiceTemplate" class="print-area">
+    <div class="invoice-page">
+        <div class="invoice-header">
+            <div class="invoice-logo">
+                <img src="https://abdullahalsalim.github.io/newalbsr/newal.jpg" crossorigin="anonymous" alt="شعار مركز صيانة نيوال">
+            </div>
+            <h2>مركز صيانة نيوال</h2>
+            <p>NEWAL SERVICE CENTER</p>
+            <p>البصرة - شارع الوطن | 07734855588 | service.basra@newal.com</p>
+        </div>
+
+        <div class="invoice-title">فاتورة / وصل استلام صيانة</div>
+
+        <table class="invoice-details">
+            <tr>
+                <th>رقم الوصل</th>
+                <td id="p-ref"></td>
+            </tr>
+            <tr>
+                <th>تاريخ تسجيل الخدمة</th>
+                <td id="p-date"></td>
+            </tr>
+            <tr>
+                <th>اسم الزبون / الوكيل</th>
+                <td id="p-name"></td>
+            </tr>
+            <tr>
+                <th>رقم الهاتف</th>
+                <td id="p-phone"></td>
+            </tr>
+        </table>
+
+        <h4 style="margin: 15px 0 5px 0; color: var(--primary);">تفاصيل المنتجات:</h4>
+        <table class="invoice-details" style="text-align: center;">
+            <thead>
+                <tr>
+                    <th style="width: 40%; text-align: center;">كود المنتج / الموديل</th>
+                    <th style="width: 40%; text-align: center;">رقم السيريال</th>
+                    <th style="width: 20%; text-align: center;">الضمان</th>
+                </tr>
+            </thead>
+            <tbody id="p-products-list">
+                </tbody>
+        </table>
+
+        <div class="terms">
+            <div class="terms-title">الشروط والأحكام:</div>
+            <ul>
+                <li>الشركة لن تسلم أي منتج إلا بوجود الوصل الورقي.</li>
+                <li>يسقط الضمان إذا تم فتح المنتج خارج الورشة المركزية أو أحد الورش المعتمدة.</li>
+                <li>مدة الضمان سنة واحدة ولا يشمل حالات الكسر أو سوء الاستخدام.</li>
+                <li>يسقط الحق باستلام المنتج بعد مرور أسبوعين على إكمال صيانته.</li>
+            </ul>
+
+            <div class="signatures">
+                <div class="signature-box">
+                    توقيع مسؤول الورشة:
+                    <br><br>
+                    ____________________
+                </div>
+                <div class="signature-box">
+                    توقيع الزبون المستلم:
+                    <br><br>
+                    ____________________
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="tagTemplate" class="print-area">
+    </div>
+
+<script>
+    document.getElementById('dateReg').valueAsDate = new Date();
+
+    // دالة إضافة سطر منتج جديد
+    function addProductRow() {
+        const tbody = document.getElementById('productsBody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><input type="text" class="item-model" placeholder="Zio-Exclusive ..."></td>
+            <td><input type="text" class="item-serial" placeholder="SN-123456"></td>
+            <td>
+                <select class="item-warranty">
+                    <option value="ضمان">ضمان</option>
+                    <option value="خارج الضمان">خارج الضمان</option>
+                </select>
+            </td>
+            <td><button type="button" class="btn-delete-row" onclick="this.closest('tr').remove()">🗑️</button></td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    // دالة جلب البيانات وتهيئتها للطباعة
+    function populateData() {
+        const refNo = document.getElementById('refNo').value;
+        const dateReg = document.getElementById('dateReg').value;
+        const custName = document.getElementById('custName').value;
+        const phone = document.getElementById('phone').value;
+
+        // تعبئة بيانات العميل الأساسية
+        document.getElementById('p-ref').innerText = refNo || '';
+        document.getElementById('p-date').innerText = dateReg || '';
+        document.getElementById('p-name').innerText = custName || '';
+        document.getElementById('p-phone').innerText = phone || '';
+
+        // جلب المنتجات المضافة
+        const models = document.querySelectorAll('.item-model');
+        const serials = document.querySelectorAll('.item-serial');
+        const warranties = document.querySelectorAll('.item-warranty');
+
+        let invoiceProductsHTML = '';
+        let tagsHTML = '';
+
+        for (let i = 0; i < models.length; i++) {
+            const m = models[i].value;
+            const s = serials[i].value;
+            const w = warranties[i].value;
+
+            // تجهيز جدول الفاتورة
+            invoiceProductsHTML += `
+                <tr>
+                    <td style="text-align: center;">${m}</td>
+                    <td style="text-align: center;">${s}</td>
+                    <td style="text-align: center;">${w}</td>
+                </tr>
+            `;
+
+            // تجهيز بطاقات الخدمة (تاك لكل منتج)
+            tagsHTML += `
+                <div class="tag-print">
+                    <div class="tag-print-header">
+                        newal Zio EXCLUSIVE
+                        <br>
+                        <span style="font-size:10px; font-style:italic; font-weight:normal;">
+                            Make your life better...
+                        </span>
+                    </div>
+                    <table>
+                        <tr><td>Service Reg No:</td><td>${refNo}</td></tr>
+                        <tr><td>Customer Name:</td><td>${custName}</td></tr>
+                        <tr><td>Model No:</td><td>${m}</td></tr>
+                        <tr><td>Serial No:</td><td>${s}</td></tr>
+                        <tr><td>Warranty:</td><td>${w}</td></tr>
+                        <tr><td>Service Reg Date:</td><td>${dateReg}</td></tr>
+                    </table>
+                </div>
+            `;
+        }
+
+        // إدراج أكواد HTML في القوالب
+        document.getElementById('p-products-list').innerHTML = invoiceProductsHTML;
+        document.getElementById('tagTemplate').innerHTML = tagsHTML;
+    }
+
+    function hidePrintTemplates() {
+        document.getElementById('invoiceTemplate').style.display = 'none';
+        document.getElementById('tagTemplate').style.display = 'none';
+    }
+
+    function printDocument(type) {
+        populateData();
+        hidePrintTemplates();
+
+        if (type === 'invoice') {
+            document.getElementById('invoiceTemplate').style.display = 'block';
+        } else if (type === 'tag') {
+            document.getElementById('tagTemplate').style.display = 'block';
+        }
+
+        window.print();
+
+        setTimeout(function () {
+            hidePrintTemplates();
+        }, 500);
+    }
+
+    function cleanFileName(value) {
+        value = (value || '').toString().trim();
+        value = value.replace(/[\\/:*?"<>|]/g, '-');
+        value = value.replace(/\s+/g, ' ').replace(/-+/g, '-').trim();
+        return value;
+    }
+
+    function loadHtml2Pdf(callback) {
+        if (typeof html2pdf !== 'undefined') {
+            callback();
+            return;
+        }
+
+        const sources = [
+            'html2pdf.bundle.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
+            'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js'
+        ];
+
+        let index = 0;
+
+        function tryLoad() {
+            if (index >= sources.length) {
+                alert('تعذر تحميل مكتبة PDF. تأكد من الاتصال بالإنترنت.');
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = sources[index];
+            script.async = true;
+            script.onload = function () {
+                if (typeof html2pdf !== 'undefined') {
+                    callback();
+                } else {
+                    index++;
+                    tryLoad();
+                }
+            };
+            script.onerror = function () {
+                index++;
+                tryLoad();
+            };
+            document.head.appendChild(script);
+        }
+        tryLoad();
+    }
+
+    function waitForImages(element) {
+        const images = Array.from(element.querySelectorAll('img'));
+        if (images.length === 0) return Promise.resolve();
+        return Promise.all(images.map(function (img) {
+            if (img.complete) return Promise.resolve();
+            return new Promise(function (resolve) {
+                img.onload = resolve;
+                img.onerror = resolve;
+            });
+        }));
+    }
+
+    function savePDF() {
+        loadHtml2Pdf(function () {
+            populateData();
+            hidePrintTemplates();
+
+            const invoice = document.getElementById('invoiceTemplate');
+            invoice.style.display = 'block';
+
+            const refNo = cleanFileName(document.getElementById('refNo').value) || 'رقم_بدون';
+            const custName = cleanFileName(document.getElementById('custName').value) || 'اسم_بدون';
+            const pdfFileName = refNo + ' - ' + custName + '.pdf';
+
+            waitForImages(invoice).then(function () {
+                const options = {
+                    margin: [10, 10, 10, 10],
+                    filename: pdfFileName,
+                    image: { type: 'jpeg', quality: 1 },
+                    html2canvas: {
+                        scale: 3,
+                        useCORS: true,
+                        allowTaint: false,
+                        backgroundColor: '#ffffff',
+                        windowWidth: invoice.scrollWidth,
+                        windowHeight: invoice.scrollHeight
+                    },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                html2pdf().set(options).from(invoice).save().then(function () {
+                    invoice.style.display = 'none';
+                }).catch(function () {
+                    invoice.style.display = 'none';
+                    alert('حدث خطأ أثناء إنشاء ملف PDF.');
+                });
+            });
+        });
+    }
+
+    function escapeCSV(value) {
+        value = value || '';
+        value = value.toString().replace(/"/g, '""');
+        if (value.includes(',') || value.includes('\n') || value.includes('"')) {
+            value = '"' + value + '"';
+        }
+        return value;
+    }
+
+    function saveAndExport() {
+        const refNo = document.getElementById('refNo').value;
+        const dateReg = document.getElementById('dateReg').value;
+        const custName = document.getElementById('custName').value;
+        const phone = document.getElementById('phone').value;
+
+        // تجميع المنتجات للتصدير
+        const models = Array.from(document.querySelectorAll('.item-model')).map(i => i.value).join(' | ');
+        const serials = Array.from(document.querySelectorAll('.item-serial')).map(i => i.value).join(' | ');
+        const warranties = Array.from(document.querySelectorAll('.item-warranty')).map(i => i.value).join(' | ');
+
+        const header = [
+            'رقم الفاتورة', 'التاريخ', 'اسم الزبون', 'رقم الهاتف', 'الموديلات', 'السيريالات', 'حالة الضمان'
+        ];
+
+        const record = [
+            refNo, dateReg, custName, phone, models, serials, warranties
+        ];
+
+        let csvContent = '\uFEFF';
+        csvContent += header.map(escapeCSV).join(',') + '\n';
+        csvContent += record.map(escapeCSV).join(',') + '\n';
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = 'سجل_صيانة_' + cleanFileName(refNo) + '.csv';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+
+        const currentRef = parseInt(refNo);
+        if (!isNaN(currentRef)) {
+            document.getElementById('refNo').value = currentRef + 1;
+        }
+
+        alert('تم التصدير بنجاح!');
+    }
+</script>
+
+</body>
+</html>
