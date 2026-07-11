@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>وصل تسليم منتجات - نيوآل</title>
+    <title>وصل تسليم منتجات - نيوآل (نموذج إدخال)</title>
+    <!-- استدعاء خط القاهرة من جوجل -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -85,6 +86,7 @@
         .info-row {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 8px;
             border-bottom: 1px dashed #ccc;
             padding-bottom: 4px;
@@ -99,10 +101,35 @@
         .info-label {
             font-weight: 600;
             color: var(--secondary-color);
+            white-space: nowrap;
+            margin-left: 10px;
         }
 
-        .info-value {
+        /* Inputs Styling */
+        input[type="text"] {
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
             font-weight: 700;
+            color: var(--text-color);
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 4px 8px;
+            width: 100%;
+            background-color: #fff;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Readonly inputs */
+        input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            color: var(--secondary-color);
         }
 
         /* Table Styles */
@@ -114,7 +141,6 @@
 
         th, td {
             border: 1px solid var(--border-color);
-            padding: 12px;
             text-align: center;
         }
 
@@ -122,7 +148,21 @@
             background-color: var(--primary-color);
             color: white;
             font-weight: 600;
+            padding: 12px;
             -webkit-print-color-adjust: exact;
+        }
+
+        td {
+            padding: 0; /* Removing padding so input fills the cell */
+        }
+
+        .table-input {
+            width: 100%;
+            border: none !important;
+            padding: 12px;
+            box-sizing: border-box;
+            text-align: center;
+            background: transparent;
         }
 
         tbody tr:nth-child(even) {
@@ -165,7 +205,7 @@
 
         .signature-line {
             border-top: 1px solid var(--text-color);
-            margin-top: 50px;
+            margin-top: 60px; /* زيادة المسافة للتوقيع الحي */
             padding-top: 10px;
             font-weight: 600;
         }
@@ -179,21 +219,12 @@
             color: #7f8c8d;
         }
 
-        .footer-logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #d35400; /* لون يشابه شعار نيوآل في الصورة */
-            margin-bottom: 10px;
-            display: inline-block;
-            transform: rotate(-90deg); /* تدوير الشعار كما في الصورة */
-        }
-
         /* Print Button */
         .btn-print {
             display: block;
             width: 200px;
             margin: 20px auto;
-            padding: 10px;
+            padding: 12px;
             background-color: var(--accent-color);
             color: white;
             text-align: center;
@@ -202,6 +233,7 @@
             font-size: 16px;
             cursor: pointer;
             font-family: 'Cairo', sans-serif;
+            font-weight: bold;
             transition: background 0.3s;
         }
 
@@ -224,6 +256,15 @@
             .btn-print {
                 display: none; /* إخفاء زر الطباعة عند الطباعة */
             }
+            input[type="text"] {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+            }
+            .info-row {
+                border-bottom: 1px solid #eee; /* إبقاء خط خفيف في الطباعة للترتيب */
+            }
         }
     </style>
 </head>
@@ -232,6 +273,7 @@
     <button class="btn-print" onclick="window.print()">🖨️ طباعة الوصل</button>
 
     <div class="receipt-container">
+        <!-- Header -->
         <div class="header">
             <div class="company-info">
                 <h1>مركز صيانة نيوآل</h1>
@@ -239,46 +281,48 @@
             </div>
             <div class="receipt-title">
                 <h2>Service</h2>
-                <p style="margin:0; font-weight:bold; color:#7f8c8d;">وصل تسليم (توصيل مركبات)</p>
+                <p style="margin:0; font-weight:bold; color:#7f8c8d;">وصل تسليم (توصيل)</p>
             </div>
         </div>
 
+        <!-- Info Grid -->
         <div class="info-grid">
+            <!-- بيانات العميل والتوصيل -->
             <div class="info-box">
                 <div class="info-row">
                     <span class="info-label">اسم الوكيل أو الزبون:</span>
-                    <span class="info-value">ميثاق أبو سجاد</span>
+                    <input type="text" placeholder="اكتب اسم الزبون هنا...">
                 </div>
                 <div class="info-row">
                     <span class="info-label">رقم الهاتف:</span>
-                    <span class="info-value">0773 465 56 99</span>
+                    <!-- أضفنا حدث onkeyup لتوليد رقم المرجع عند كتابة الهاتف -->
+                    <input type="text" id="phoneInput" placeholder="مثال: 07734655699" onkeyup="generateRef()">
                 </div>
                 <div class="info-row">
                     <span class="info-label">العنوان:</span>
-                    <span class="info-value">الزبير</span>
+                    <input type="text" placeholder="اكتب عنوان التوصيل...">
                 </div>
             </div>
 
+            <!-- بيانات الوصل -->
             <div class="info-box">
                 <div class="info-row">
-                    <span class="info-label">تاريخ الإصدار (Issue Date):</span>
-                    <span class="info-value">07/07/2026</span>
+                    <span class="info-label">تاريخ الإصدار (Date):</span>
+                    <input type="text" id="issueDate">
                 </div>
                 <div class="info-row">
                     <span class="info-label">رقم المرجع (Ref):</span>
-                    <span class="info-value">1024</span>
+                    <!-- حقل للقراءة فقط، يتم تعبئته برمجياً -->
+                    <input type="text" id="refNumber" readonly placeholder="يتم توليده تلقائياً...">
                 </div>
                 <div class="info-row">
                     <span class="info-label">اسم السائق / المندوب:</span>
-                    <span class="info-value">.................</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">رقم المركبة:</span>
-                    <span class="info-value">.................</span>
+                    <input type="text" placeholder="اكتب اسم السائق...">
                 </div>
             </div>
         </div>
 
+        <!-- Table -->
         <table>
             <thead>
                 <tr>
@@ -290,20 +334,27 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>1</td>
-                    <td>FAN-349</td>
-                    <td>تم التسليم</td>
-                    <td>مروحة جدارية</td>
+                    <td><input type="text" class="table-input"></td>
+                    <td><input type="text" class="table-input"></td>
+                    <td><input type="text" class="table-input"></td>
+                    <td><input type="text" class="table-input"></td>
                 </tr>
                 <tr>
-                    <td>&nbsp;</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><input type="text" class="table-input"></td>
+                    <td><input type="text" class="table-input"></td>
+                    <td><input type="text" class="table-input"></td>
+                    <td><input type="text" class="table-input"></td>
+                </tr>
+                 <tr>
+                    <td><input type="text" class="table-input"></td>
+                    <td><input type="text" class="table-input"></td>
+                    <td><input type="text" class="table-input"></td>
+                    <td><input type="text" class="table-input"></td>
                 </tr>
             </tbody>
         </table>
 
+        <!-- Terms and Conditions -->
         <div class="terms">
             <h4>شروط وأحكام الصيانة والتسليم:</h4>
             <ul>
@@ -315,18 +366,18 @@
             </ul>
         </div>
 
+        <!-- Signatures -->
         <div class="signatures">
             <div class="signature-box">
                 <div class="signature-line">توقيع مسؤول الورشة / السائق</div>
-                <span style="font-family: Tahoma; font-style: italic; color: blue;">منقذ وحيد</span>
             </div>
             
             <div class="signature-box">
                 <div class="signature-line">توقيع واستلام الزبون</div>
-                <span style="font-family: Tahoma; font-style: italic; color: blue;">سجاد ميثاق</span>
             </div>
         </div>
 
+        <!-- Footer -->
         <div class="footer">
             <div style="margin-bottom: 15px;">Make all checks payable to مركز صيانة نيوآل</div>
             <div style="display: flex; justify-content: center; gap: 20px; align-items: center; font-weight: bold;">
@@ -338,6 +389,54 @@
             </div>
         </div>
     </div>
+
+    <!-- كود الجافاسكربت لتوليد المرجع والتاريخ -->
+    <script>
+        // دالة لوضع تاريخ اليوم تلقائياً عند فتح الصفحة
+        function setTodayDate() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            let mm = today.getMonth() + 1; // الأشهر تبدأ من 0
+            let dd = today.getDate();
+
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+
+            document.getElementById('issueDate').value = dd + '/' + mm + '/' + yyyy;
+        }
+
+        // دالة لتوليد رقم المرجع بناءً على التاريخ ورقم الهاتف
+        function generateRef() {
+            const phoneInput = document.getElementById('phoneInput').value;
+            // مسح أي مسافات من رقم الهاتف لتجنب الأخطاء
+            const cleanPhone = phoneInput.replace(/\s+/g, ''); 
+            
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const m = today.getMonth() + 1; 
+            const d = today.getDate();
+
+            // الصيغة المطلوبة للتاريخ (مثال: 2026722)
+            const datePart = yyyy.toString() + m.toString() + d.toString();
+            
+            let phonePart = "";
+            // جلب آخر 3 أرقام من الهاتف إذا كان طوله يسمح بذلك
+            if (cleanPhone.length >= 3) {
+                phonePart = cleanPhone.slice(-3);
+            }
+
+            // إذا كان المستخدم قد كتب 3 أرقام على الأقل، يتم دمجها مع التاريخ
+            if (phonePart !== "") {
+                document.getElementById('refNumber').value = datePart + phonePart;
+            } else {
+                // تصفير الحقل إذا مسح المستخدم الرقم
+                document.getElementById('refNumber').value = "";
+            }
+        }
+
+        // تشغيل دالة التاريخ فور تحميل الصفحة
+        window.onload = setTodayDate;
+    </script>
 
 </body>
 </html>
