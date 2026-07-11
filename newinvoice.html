@@ -599,8 +599,19 @@
     }
 
     function savePDF() {
-        alert('لضمان ظهور اللغة العربية والتنسيق بشكل سليم 100%، سيتم فتح نافذة الطباعة.\\n\\nيرجى تغيير خيار "الطابعة" (Destination) إلى "حفظ بتنسيق PDF" (Save as PDF) ثم النقر على حفظ.');
-        printDocument('invoice');
+        populateData();
+        hidePrintTemplates();
+        const element = document.getElementById('invoiceTemplate');
+        element.style.display='block';
+        const refNo=document.getElementById('refNo').value||'فاتورة';
+        const opt={
+            margin:8,
+            filename:'فاتورة_'+cleanFileName(refNo)+'.pdf',
+            image:{type:'jpeg',quality:1},
+            html2canvas:{scale:3,useCORS:true},
+            jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+        };
+        html2pdf().set(opt).from(element).save().then(()=>hidePrintTemplates());
     }
 
     function escapeCSV(value) {
@@ -657,5 +668,6 @@
     }
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </body>
 </html>
