@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Newal Maintenance Management System</title>
+    <title>Newal Maintenance Management System — نظام إدارة صيانة نيوال</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
@@ -44,8 +44,9 @@
             text-align: center;
             border-bottom: 2px solid var(--primary);
             padding-bottom: 10px;
-            font-size: 26px;
+            font-size: 22px;
             margin-bottom: 10px;
+            line-height: 1.4;
         }
 
         .logo-box {
@@ -78,6 +79,11 @@
             color: var(--primary);
         }
 
+        label .ar {
+            font-weight: normal;
+            color: #555;
+        }
+
         input,
         select {
             padding: 11px;
@@ -108,6 +114,8 @@
         .products-table-input th {
             background: var(--secondary);
             color: var(--primary);
+            font-size: 13px;
+            line-height: 1.5;
         }
 
         .btn-delete-row {
@@ -137,7 +145,8 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 15px;
+            line-height: 1.4;
             transition: 0.3s;
             font-family: inherit;
         }
@@ -172,7 +181,6 @@
             background: #fff;
             margin: 0 auto;
             padding: 20px;
-            direction: ltr;
             text-align: left;
             box-sizing: border-box;
         }
@@ -197,8 +205,8 @@
         .invoice-header h2 {
             margin: 3px 0;
             color: var(--primary);
-            font-size: 21px;
-            line-height: 1.3;
+            font-size: 19px;
+            line-height: 1.4;
         }
 
         .invoice-header p {
@@ -211,11 +219,12 @@
             text-align: center;
             color: #000;
             margin: 10px 0;
-            font-size: 17px;
+            font-size: 15.5px;
             font-weight: bold;
             border-top: 1px solid #000;
             border-bottom: 1px solid #000;
             padding: 6px 0;
+            line-height: 1.5;
         }
 
         .invoice-details {
@@ -223,15 +232,14 @@
             border-collapse: collapse;
             table-layout: fixed;
             margin-top: 10px;
-            direction: ltr;
         }
 
         .invoice-details th,
         .invoice-details td {
             border: 1px solid #000;
             padding: 8px 10px;
-            font-size: 13.5px;
-            line-height: 1.6;
+            font-size: 12.5px;
+            line-height: 1.5;
             vertical-align: top;
             text-align: left;
             word-break: normal;
@@ -251,10 +259,19 @@
             min-height: 28px;
         }
 
+        .bi-label .ar {
+            display: block;
+            font-weight: normal;
+            font-size: 0.92em;
+            color: #333;
+            direction: rtl;
+            text-align: right;
+        }
+
         .terms {
             margin-top: 18px;
-            font-size: 12.5px;
-            line-height: 1.7;
+            font-size: 12px;
+            line-height: 1.6;
             color: #000;
         }
 
@@ -263,13 +280,28 @@
             margin-bottom: 5px;
         }
 
+        .terms-title .ar {
+            display: block;
+            direction: rtl;
+            text-align: right;
+            font-size: 0.95em;
+        }
+
         .terms ul {
             margin: 5px 0 0 0;
             padding-left: 20px;
         }
 
         .terms li {
-            margin-bottom: 3px;
+            margin-bottom: 8px;
+        }
+
+        .terms li .ar {
+            display: block;
+            direction: rtl;
+            text-align: right;
+            font-size: 0.95em;
+            margin-top: 2px;
         }
 
         .signatures {
@@ -282,8 +314,14 @@
         .signature-box {
             width: 50%;
             text-align: center;
-            font-size: 12.5px;
+            font-size: 12px;
             color: #000;
+        }
+
+        .signature-box .ar {
+            display: block;
+            direction: rtl;
+            font-size: 0.95em;
         }
 
         .tag-print {
@@ -291,10 +329,12 @@
             border: 2px solid #000;
             padding: 10px;
             margin: 0 auto 20px auto; 
-            font-size: 14px;
+            font-size: 13px;
             background: #fff;
             box-sizing: border-box;
-            page-break-inside: avoid; 
+            page-break-inside: avoid;
+            direction: ltr;
+            text-align: left;
         }
 
         .tag-print-header {
@@ -322,6 +362,15 @@
             width: 45%;
         }
 
+        .tag-print table td .ar {
+            display: block;
+            direction: rtl;
+            text-align: right;
+            font-size: 0.85em;
+            font-weight: normal;
+            color: #444;
+        }
+
         @media (max-width: 768px) {
             .form-grid { grid-template-columns: 1fr; }
             .full-width { grid-column: span 1; }
@@ -329,7 +378,7 @@
             button { width: 100%; font-size: 15px; }
             .signatures { flex-direction: column; gap: 15px; }
             .signature-box { width: 100%; }
-            .products-table-input th, .products-table-input td { font-size: 12px; padding: 4px; }
+            .products-table-input th, .products-table-input td { font-size: 11px; padding: 4px; }
         }
 
         @media print {
@@ -347,42 +396,42 @@
 <body>
 
 <div class="container no-print">
-    <h1>Maintenance System - Newal Center (Basra)</h1>
+    <h1>Maintenance System - Newal Center (Basra)<br><span class="ar" style="direction: rtl; display: inline-block; font-size: 0.85em;">نظام الصيانة - مركز نيوال (البصرة)</span></h1>
 
     <div class="logo-box">
-        <img src="https://abdullahalsalim.github.io/newalbsr/newal.jpg" crossorigin="anonymous" alt="Newal Maintenance Center Logo">
+        <img src="https://abdullahalsalim.github.io/newalbsr/newal.jpg" crossorigin="anonymous" alt="Newal Maintenance Center Logo - شعار مركز صيانة نيوال">
     </div>
 
     <div class="form-grid">
         <div class="form-group">
-            <label>Invoice / Receipt Number:</label>
+            <label>Invoice / Receipt Number: <span class="ar">رقم الفاتورة / الوصل:</span></label>
             <input type="text" id="refNo" value="1001">
         </div>
 
         <div class="form-group">
-            <label>Service Registration Date:</label>
+            <label>Service Registration Date: <span class="ar">تاريخ تسجيل الخدمة:</span></label>
             <input type="date" id="dateReg">
         </div>
 
         <div class="form-group">
-            <label>Customer / Agent Name:</label>
-            <input type="text" id="custName" placeholder="Enter customer name">
+            <label>Customer / Agent Name: <span class="ar">اسم الزبون / الوكيل:</span></label>
+            <input type="text" id="custName" placeholder="Enter customer name / أدخل اسم الزبون">
         </div>
 
         <div class="form-group">
-            <label>Phone Number:</label>
+            <label>Phone Number: <span class="ar">رقم الهاتف:</span></label>
             <input type="text" id="phone" placeholder="077xxxxxxx">
         </div>
 
         <div class="form-group full-width">
-            <label>Products Received for Maintenance:</label>
+            <label>Products Received for Maintenance: <span class="ar">المنتجات المستلمة للصيانة:</span></label>
             <table class="products-table-input" id="productsTable">
                 <thead>
                     <tr>
-                        <th width="35%">Product Code / Model</th>
-                        <th width="35%">Serial Number</th>
-                        <th width="20%">Warranty</th>
-                        <th width="10%">Action</th>
+                        <th width="35%">Product Code / Model<br><span class="ar" style="direction:rtl;">كود المنتج / الموديل</span></th>
+                        <th width="35%">Serial Number<br><span class="ar" style="direction:rtl;">رقم السيريال</span></th>
+                        <th width="20%">Warranty<br><span class="ar" style="direction:rtl;">الضمان</span></th>
+                        <th width="10%">Action<br><span class="ar" style="direction:rtl;">إجراء</span></th>
                     </tr>
                 </thead>
                 <tbody id="productsBody">
@@ -391,8 +440,8 @@
                         <td><input type="text" class="item-serial" placeholder="SN-123456"></td>
                         <td>
                             <select class="item-warranty">
-                                <option value="Under Warranty">Under Warranty</option>
-                                <option value="Out of Warranty">Out of Warranty</option>
+                                <option value="warranty">Under Warranty / ضمان</option>
+                                <option value="no_warranty">Out of Warranty / خارج الضمان</option>
                             </select>
                         </td>
                         <td>-</td>
@@ -400,16 +449,16 @@
                 </tbody>
             </table>
             <div style="text-align: left;">
-                <button type="button" class="btn-add-item" onclick="addProductRow()">➕ Add Another Product</button>
+                <button type="button" class="btn-add-item" onclick="addProductRow()">➕ Add Another Product / إضافة منتج آخر</button>
             </div>
         </div>
     </div>
 
     <div class="actions">
-        <button class="btn-primary" onclick="printDocument('invoice')">Print Invoice 📄</button>
-        <button class="btn-secondary" onclick="printDocument('tag')">Print Service Tag 🏷️</button>
-        <button class="btn-pdf" onclick="savePDF()">Save Invoice as PDF 📑</button>
-        <button class="btn-export" onclick="saveAndExport()">Save & Export CSV Record 💾</button>
+        <button class="btn-primary" onclick="printDocument('invoice')">Print Invoice 📄<br>طباعة الفاتورة</button>
+        <button class="btn-secondary" onclick="printDocument('tag')">Print Service Tag 🏷️<br>طباعة بطاقة الخدمة</button>
+        <button class="btn-pdf" onclick="savePDF()">Save Invoice as PDF 📑<br>حفظ الفاتورة PDF</button>
+        <button class="btn-export" onclick="saveAndExport()">Save & Export CSV 💾<br>حفظ وتصدير السجل CSV</button>
     </div>
 </div>
 
@@ -417,41 +466,41 @@
     <div class="invoice-page">
         <div class="invoice-header">
             <div class="invoice-logo">
-                <img src="https://abdullahalsalim.github.io/newalbsr/newal.jpg" crossorigin="anonymous" alt="Newal Maintenance Center Logo">
+                <img src="https://abdullahalsalim.github.io/newalbsr/newal.jpg" crossorigin="anonymous" alt="Newal Maintenance Center Logo - شعار مركز صيانة نيوال">
             </div>
-            <h2>Newal Maintenance Center</h2>
+            <h2>Newal Maintenance Center<br><span style="direction:rtl; display:inline-block; font-size:0.85em;">مركز صيانة نيوال</span></h2>
             <p>NEWAL SERVICE CENTER</p>
-            <p>Basra - Al-Watan Street | 07734855588 | service.basra@newal.com</p>
+            <p>Basra - Al-Watan Street <span style="direction:rtl; display:inline-block;">— البصرة - شارع الوطن</span> | 07734855588 | service.basra@newal.com</p>
         </div>
 
-        <div class="invoice-title">Invoice / Maintenance Receipt</div>
+        <div class="invoice-title">Invoice / Maintenance Receipt<br><span style="direction:rtl; display:inline-block;">فاتورة / وصل استلام صيانة</span></div>
 
         <table class="invoice-details">
             <tr>
-                <th>Receipt Number</th>
+                <th class="bi-label">Receipt Number<span class="ar">رقم الوصل</span></th>
                 <td id="p-ref"></td>
             </tr>
             <tr>
-                <th>Service Registration Date</th>
+                <th class="bi-label">Service Registration Date<span class="ar">تاريخ تسجيل الخدمة</span></th>
                 <td id="p-date"></td>
             </tr>
             <tr>
-                <th>Customer / Agent Name</th>
+                <th class="bi-label">Customer / Agent Name<span class="ar">اسم الزبون / الوكيل</span></th>
                 <td id="p-name"></td>
             </tr>
             <tr>
-                <th>Phone Number</th>
+                <th class="bi-label">Phone Number<span class="ar">رقم الهاتف</span></th>
                 <td id="p-phone"></td>
             </tr>
         </table>
 
-        <h4 style="margin: 15px 0 5px 0; color: var(--primary);">Product Details:</h4>
+        <h4 style="margin: 15px 0 5px 0; color: var(--primary);">Product Details: <span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.9em;">تفاصيل المنتجات:</span></h4>
         <table class="invoice-details" style="text-align: center;">
             <thead>
                 <tr>
-                    <th style="width: 40%; text-align: center;">Product Code / Model</th>
-                    <th style="width: 40%; text-align: center;">Serial Number</th>
-                    <th style="width: 20%; text-align: center;">Warranty</th>
+                    <th style="width: 40%; text-align: center;">Product Code / Model<br><span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.9em;">كود المنتج / الموديل</span></th>
+                    <th style="width: 40%; text-align: center;">Serial Number<br><span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.9em;">رقم السيريال</span></th>
+                    <th style="width: 20%; text-align: center;">Warranty<br><span style="direction:rtl; display:inline-block; font-weight:normal; font-size:0.9em;">الضمان</span></th>
                 </tr>
             </thead>
             <tbody id="p-products-list">
@@ -459,22 +508,22 @@
         </table>
 
         <div class="terms">
-            <div class="terms-title">Terms and Conditions:</div>
+            <div class="terms-title">Terms and Conditions:<span class="ar">الشروط والأحكام:</span></div>
             <ul>
-                <li>The company will not release any product without the paper receipt.</li>
-                <li>The warranty is voided if the product is opened outside the central workshop or an authorized workshop.</li>
-                <li>The warranty period is one year and does not cover breakage or misuse.</li>
-                <li>The right to collect the product is forfeited after two weeks from completion of maintenance.</li>
+                <li>The company will not release any product without the paper receipt.<span class="ar">الشركة لن تسلم أي منتج إلا بوجود الوصل الورقي.</span></li>
+                <li>The warranty is voided if the product is opened outside the central workshop or an authorized workshop.<span class="ar">يسقط الضمان إذا تم فتح المنتج خارج الورشة المركزية أو أحد الورش المعتمدة.</span></li>
+                <li>The warranty period is one year and does not cover breakage or misuse.<span class="ar">مدة الضمان سنة واحدة ولا يشمل حالات الكسر أو سوء الاستخدام.</span></li>
+                <li>The right to collect the product is forfeited after two weeks from completion of maintenance.<span class="ar">يسقط الحق باستلام المنتج بعد مرور أسبوعين على إكمال صيانته.</span></li>
             </ul>
 
             <div class="signatures">
                 <div class="signature-box">
-                    Workshop Manager Signature:
+                    Workshop Manager Signature:<span class="ar">توقيع مسؤول الورشة:</span>
                     <br><br>
                     ____________________
                 </div>
                 <div class="signature-box">
-                    Customer Signature:
+                    Customer Signature:<span class="ar">توقيع الزبون المستلم:</span>
                     <br><br>
                     ____________________
                 </div>
@@ -491,6 +540,12 @@
 <script>
     document.getElementById('dateReg').valueAsDate = new Date();
 
+    // Bilingual warranty labels, keyed by the option's stored value code
+    const warrantyLabels = {
+        warranty: { en: 'Under Warranty', ar: 'ضمان' },
+        no_warranty: { en: 'Out of Warranty', ar: 'خارج الضمان' }
+    };
+
     // Function to add a new product row
     function addProductRow() {
         const tbody = document.getElementById('productsBody');
@@ -500,8 +555,8 @@
             <td><input type="text" class="item-serial" placeholder="SN-123456"></td>
             <td>
                 <select class="item-warranty">
-                    <option value="Under Warranty">Under Warranty</option>
-                    <option value="Out of Warranty">Out of Warranty</option>
+                    <option value="warranty">Under Warranty / ضمان</option>
+                    <option value="no_warranty">Out of Warranty / خارج الضمان</option>
                 </select>
             </td>
             <td><button type="button" class="btn-delete-row" onclick="this.closest('tr').remove()">🗑️</button></td>
@@ -533,18 +588,19 @@
         for (let i = 0; i < models.length; i++) {
             const m = models[i].value;
             const s = serials[i].value;
-            const w = warranties[i].value;
+            const wCode = warranties[i].value;
+            const w = warrantyLabels[wCode] || { en: wCode, ar: '' };
 
-            // Build the invoice table
+            // Build the invoice table (bilingual warranty label)
             invoiceProductsHTML += `
                 <tr>
                     <td style="text-align: center;">${m}</td>
                     <td style="text-align: center;">${s}</td>
-                    <td style="text-align: center;">${w}</td>
+                    <td style="text-align: center;">${w.en}<br><span style="direction:rtl; display:inline-block; font-size:0.9em; color:#444;">${w.ar}</span></td>
                 </tr>
             `;
 
-            // Build the service tags (one tag per product)
+            // Build the service tags (bilingual, one tag per product)
             tagsHTML += `
                 <div class="tag-print">
                     <div class="tag-print-header">
@@ -555,12 +611,12 @@
                         </span>
                     </div>
                     <table>
-                        <tr><td>Service Reg No:</td><td>${refNo}</td></tr>
-                        <tr><td>Customer Name:</td><td>${custName}</td></tr>
-                        <tr><td>Model No:</td><td>${m}</td></tr>
-                        <tr><td>Serial No:</td><td>${s}</td></tr>
-                        <tr><td>Warranty:</td><td>${w}</td></tr>
-                        <tr><td>Service Reg Date:</td><td>${dateReg}</td></tr>
+                        <tr><td>Service Reg No:<span class="ar">رقم تسجيل الخدمة:</span></td><td>${refNo}</td></tr>
+                        <tr><td>Customer Name:<span class="ar">اسم الزبون:</span></td><td>${custName}</td></tr>
+                        <tr><td>Model No:<span class="ar">رقم الموديل:</span></td><td>${m}</td></tr>
+                        <tr><td>Serial No:<span class="ar">الرقم التسلسلي:</span></td><td>${s}</td></tr>
+                        <tr><td>Warranty:<span class="ar">الضمان:</span></td><td>${w.en} / ${w.ar}</td></tr>
+                        <tr><td>Service Reg Date:<span class="ar">تاريخ التسجيل:</span></td><td>${dateReg}</td></tr>
                     </table>
                 </div>
             `;
@@ -643,7 +699,7 @@
         }).catch(function (err) {
             invoiceTemplate.style.display = 'none';
             console.error('PDF generation failed:', err);
-            alert('An error occurred while generating the PDF. Please try again.');
+            alert('An error occurred while generating the PDF. Please try again.\n\nحدث خطأ أثناء إنشاء ملف PDF. الرجاء المحاولة مرة أخرى.');
         });
     }
 
@@ -665,10 +721,20 @@
         // Compile products for export
         const models = Array.from(document.querySelectorAll('.item-model')).map(i => i.value).join(' | ');
         const serials = Array.from(document.querySelectorAll('.item-serial')).map(i => i.value).join(' | ');
-        const warranties = Array.from(document.querySelectorAll('.item-warranty')).map(i => i.value).join(' | ');
+        const warranties = Array.from(document.querySelectorAll('.item-warranty')).map(function (sel) {
+            const w = warrantyLabels[sel.value] || { en: sel.value, ar: '' };
+            return w.en + ' / ' + w.ar;
+        }).join(' | ');
 
+        // Bilingual CSV headers
         const header = [
-            'Invoice Number', 'Date', 'Customer Name', 'Phone Number', 'Models', 'Serial Numbers', 'Warranty Status'
+            'Invoice Number / رقم الفاتورة',
+            'Date / التاريخ',
+            'Customer Name / اسم الزبون',
+            'Phone Number / رقم الهاتف',
+            'Models / الموديلات',
+            'Serial Numbers / السيريالات',
+            'Warranty Status / حالة الضمان'
         ];
 
         const record = [
@@ -697,7 +763,7 @@
             document.getElementById('refNo').value = currentRef + 1;
         }
 
-        alert('Exported successfully!');
+        alert('Exported successfully! / تم التصدير بنجاح!');
     }
 </script>
 
