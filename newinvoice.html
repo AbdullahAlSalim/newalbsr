@@ -486,6 +486,8 @@
 <div id="tagTemplate" class="print-area">
     </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
     document.getElementById('dateReg').valueAsDate = new Date();
 
@@ -599,8 +601,50 @@
     }
 
     function savePDF() {
-        alert('To ensure the text and formatting display correctly, the print window will now open.\\n\\nPlease change the "Destination" (Printer) option to "Save as PDF" and then click Save.');
-        printDocument('invoice');
+        populateData();
+
+        const invoiceTemplate = document.getElementById('invoiceTemplate');
+        const invoicePage = invoiceTemplate.querySelector('.invoice-page');
+
+        // Make the invoice visible (in normal flow, not off-screen) so html2canvas can render it correctly
+        invoiceTemplate.style.display = 'block';
+
+        html2canvas(invoicePage, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#ffffff'
+        }).then(function (canvas) {
+            invoiceTemplate.style.display = 'none';
+
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = pageWidth;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            const refNo = document.getElementById('refNo').value;
+            pdf.save('Invoice_' + cleanFileName(refNo) + '.pdf');
+        }).catch(function (err) {
+            invoiceTemplate.style.display = 'none';
+            console.error('PDF generation failed:', err);
+            alert('An error occurred while generating the PDF. Please try again.');
+        });
     }
 
     function escapeCSV(value) {
