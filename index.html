@@ -544,6 +544,7 @@
 
     // Bilingual warranty labels, keyed by the option's stored value code
     const warrantyLabels = {
+        non: { en: 'N/A', ar: 'N/A' },
         warranty: { en: 'Under Warranty', ar: 'ضمان' },
         no_warranty: { en: 'Out of Warranty', ar: 'خارج الضمان' }
     };
@@ -557,6 +558,7 @@
             <td><input type="text" class="item-serial" placeholder="SN-123456"></td>
             <td>
                 <select class="item-warranty">
+                    <option value="NON">N/A</option>
                     <option value="warranty">Under Warranty / ضمان</option>
                     <option value="no_warranty">Out of Warranty / خارج الضمان</option>
                 </select>
