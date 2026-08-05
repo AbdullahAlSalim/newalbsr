@@ -698,8 +698,10 @@
                 heightLeft -= pageHeight;
             }
 
-            const refNo = document.getElementById('refNo').value;
-            pdf.save('Invoice_' + cleanFileName(refNo) + '.pdf');
+            const custName = document.getElementById('custName').value;
+            const dateReg = document.getElementById('dateReg').value;
+            const pdfFileName = cleanFileName(custName) + '_' + cleanFileName(dateReg);
+            pdf.save(pdfFileName + '.pdf');
         }).catch(function (err) {
             invoiceTemplate.style.display = 'none';
             console.error('PDF generation failed:', err);
