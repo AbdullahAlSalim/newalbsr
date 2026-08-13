@@ -323,6 +323,24 @@
       margin-bottom: 30px;
     }
 
+
+    .header-logo {
+      flex: 0 0 155px;
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .header-logo img {
+      display: block;
+      width: 150px;
+      height: 82px;
+      object-fit: cover;
+      object-position: center 52%;
+    }
+
     .company-info h1 {
       margin: 0;
       color: var(--primary-color);
@@ -506,6 +524,15 @@
       .customers-list { grid-template-columns: 1fr; }
       .receipt-page { padding: 18px; }
       .header { align-items: flex-start; }
+      .header-logo {
+        flex-basis: 105px;
+        width: 105px;
+        height: 62px;
+      }
+      .header-logo img {
+        width: 105px;
+        height: 62px;
+      }
       .company-info h1 { font-size: 21px; }
       .receipt-title h2 { font-size: 24px; }
       .products-table th, .products-table td { font-size: 11px; }
@@ -580,6 +607,20 @@
         padding-bottom: 4mm !important;
         break-inside: avoid;
         page-break-inside: avoid;
+      }
+
+      .header-logo {
+        flex: 0 0 37mm !important;
+        width: 37mm !important;
+        height: 20mm !important;
+        overflow: hidden !important;
+      }
+
+      .header-logo img {
+        width: 36mm !important;
+        height: 20mm !important;
+        object-fit: cover !important;
+        object-position: center 52% !important;
       }
 
       .company-info h1 {
@@ -1201,6 +1242,18 @@
     company.appendChild(el('h1', '', 'مركز صيانة نيوآل'));
     company.appendChild(el('p', '', 'Newal Service Center'));
 
+    const logoBox = el('div', 'header-logo');
+    const logoImg = document.createElement('img');
+    logoImg.src = 'newal.jpg';
+    logoImg.alt = 'Newal';
+    logoImg.onerror = function () {
+      if (!this.dataset.fallbackUsed) {
+        this.dataset.fallbackUsed = '1';
+        this.src = 'https://raw.githubusercontent.com/AbdullahAlSalim/newalbsr/main/newal.jpg';
+      }
+    };
+    logoBox.appendChild(logoImg);
+
     const title = el('div', 'receipt-title');
     title.appendChild(el('h2', '', 'Service'));
     const titleP = el('p', '', 'وصل تسليم (توصيل)');
@@ -1209,7 +1262,7 @@
     titleP.style.color = '#7f8c8d';
     title.appendChild(titleP);
 
-    header.append(company, title);
+    header.append(company, logoBox, title);
     receipt.appendChild(header);
 
     const infoGrid = el('div', 'info-grid');
