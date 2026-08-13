@@ -232,20 +232,87 @@
     }
 
     #receiptsHost {
-      max-width: 900px;
+      width: 210mm;
+      max-width: 100%;
       margin: 0 auto;
     }
 
     .receipt-page {
+      width: 210mm;
+      min-height: 297mm;
+      max-width: 100%;
+      box-sizing: border-box;
       background: #fff;
-      padding: 40px;
+      padding: 14mm 13mm 11mm;
       margin: 0 auto 24px;
       box-shadow: 0 0 20px rgba(0,0,0,.1);
-      border-top: 8px solid var(--primary-color);
-      border-radius: 8px;
+      border: 1px solid #d7dde2;
+      border-top: 3mm solid var(--primary-color);
+      border-radius: 3mm;
+      overflow: visible;
     }
 
     .receipt-page.hidden { display: none; }
+
+    .receipt-page.compact {
+      padding-top: 10mm;
+      padding-bottom: 8mm;
+    }
+
+    .receipt-page.compact .header {
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+    }
+
+    .receipt-page.compact .info-grid {
+      margin-bottom: 18px;
+    }
+
+    .receipt-page.compact .terms {
+      margin: 14px 0 24px;
+      padding: 10px 14px;
+    }
+
+    .receipt-page.compact .signatures {
+      margin-top: 34px;
+      margin-bottom: 18px;
+    }
+
+    .receipt-page.dense {
+      padding-top: 8mm;
+      padding-bottom: 7mm;
+    }
+
+    .receipt-page.dense .header {
+      margin-bottom: 12px;
+      padding-bottom: 9px;
+    }
+
+    .receipt-page.dense .info-grid {
+      margin-bottom: 12px;
+    }
+
+    .receipt-page.dense .products-table th,
+    .receipt-page.dense .products-table td {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      font-size: 11.5px;
+    }
+
+    .receipt-page.dense .terms {
+      margin: 10px 0 16px;
+      padding: 8px 12px;
+      font-size: 11.5px;
+    }
+
+    .receipt-page.dense .signatures {
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    .receipt-page.dense .signature-line {
+      margin-top: 42px;
+    }
 
     .header {
       display: flex;
@@ -332,6 +399,28 @@
     .receipt-input[readonly] {
       background: #e9ecef;
       color: var(--secondary-color);
+    }
+
+
+    .notes-editor {
+      width: 100%;
+      min-height: 64px;
+      resize: vertical;
+      border: 1px solid #cfd6dc;
+      border-radius: 5px;
+      padding: 7px 8px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      line-height: 1.6;
+      background: #fff;
+      color: var(--text-color);
+      box-sizing: border-box;
+    }
+
+    .notes-editor:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 4px rgba(52, 152, 219, .25);
     }
 
     table.products-table {
@@ -423,14 +512,22 @@
     }
 
     @page {
-      size: A4;
-      margin: 10mm;
+      size: A4 portrait;
+      margin: 6mm;
     }
 
     @media print {
+      html, body {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+      }
+
       body {
-        background: #fff;
-        padding: 0;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
 
       .app-panel,
@@ -440,19 +537,29 @@
       }
 
       #receiptsHost {
-        max-width: none;
-        margin: 0;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
       }
 
       .receipt-page {
         display: block !important;
-        box-shadow: none;
-        border: none;
-        border-radius: 0;
-        margin: 0;
-        padding: 0;
+        width: 100% !important;
+        min-height: 285mm !important;
+        max-width: none !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        padding: 8mm 9mm 7mm !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        border: 0.35mm solid #bdc3c7 !important;
+        border-top: 2.5mm solid var(--primary-color) !important;
+        border-radius: 3mm !important;
+        overflow: visible !important;
         page-break-after: always;
         break-after: page;
+        page-break-inside: avoid;
       }
 
       .receipt-page:last-child {
@@ -468,33 +575,188 @@
         display: block !important;
       }
 
+      .header {
+        margin-bottom: 6mm !important;
+        padding-bottom: 4mm !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .company-info h1 {
+        font-size: 21px !important;
+      }
+
+      .company-info p {
+        font-size: 11px !important;
+      }
+
+      .receipt-title h2 {
+        font-size: 25px !important;
+      }
+
+      .receipt-title p {
+        font-size: 11px !important;
+      }
+
       .info-grid {
-        grid-template-columns: 1.12fr 0.88fr;
-        gap: 8mm;
+        grid-template-columns: 1.18fr 0.82fr !important;
+        gap: 5mm !important;
+        margin-bottom: 6mm !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
       }
 
-      .info-label {
-        flex: 0 0 auto !important;
-        flex-shrink: 0 !important;
-        font-size: 11.5px;
-        white-space: nowrap !important;
-      }
-
-      .receipt-input {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 0 0 2px !important;
-        box-shadow: none !important;
-        min-width: 0 !important;
-        font-size: 12px;
+      .info-box {
+        padding: 3mm !important;
+        border-radius: 2mm !important;
       }
 
       .info-row {
-        border-bottom: 1px solid #eee;
-        gap: 5px;
+        display: grid !important;
+        grid-template-columns: max-content minmax(0, 1fr) !important;
+        align-items: center !important;
+        column-gap: 2mm !important;
+        min-width: 0 !important;
+        margin-bottom: 1.5mm !important;
+        padding-bottom: 1mm !important;
+        border-bottom: 0.2mm solid #e5e5e5 !important;
+      }
+
+      .info-label {
+        display: block !important;
+        width: auto !important;
+        max-width: none !important;
+        min-width: max-content !important;
+        flex: none !important;
+        flex-shrink: 0 !important;
+        font-size: 10.5px !important;
+        line-height: 1.45 !important;
+        white-space: nowrap !important;
+        overflow: visible !important;
+      }
+
+      .receipt-input {
+        width: 100% !important;
+        min-width: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        font-size: 10.5px !important;
+        line-height: 1.45 !important;
+      }
+
+      table.products-table {
+        margin-bottom: 4mm !important;
+        table-layout: fixed !important;
+        break-inside: auto !important;
+      }
+
+      .products-table thead {
+        display: table-header-group;
+      }
+
+      .products-table tr {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .products-table th {
+        padding: 2.2mm 1.5mm !important;
+        font-size: 10.5px !important;
+      }
+
+      .products-table td {
+        padding: 1.8mm 1.5mm !important;
+        font-size: 10.5px !important;
+        line-height: 1.45 !important;
+      }
+
+      .notes-editor {
+        display: block !important;
+        width: 100% !important;
+        min-height: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        resize: none !important;
+        overflow: hidden !important;
+        font-family: 'Cairo', sans-serif !important;
+        font-size: 10.5px !important;
+        line-height: 1.45 !important;
+        color: #333 !important;
+        white-space: pre-wrap !important;
+      }
+
+      .terms {
+        margin: 4mm 0 7mm !important;
+        padding: 3mm 4mm !important;
+        font-size: 9.5px !important;
+        line-height: 1.5 !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .terms h4 {
+        margin-bottom: 1.5mm !important;
+      }
+
+      .signatures {
+        margin-top: 9mm !important;
+        margin-bottom: 5mm !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .signature-box {
+        width: 44% !important;
+        font-size: 10.5px !important;
+      }
+
+      .signature-line {
+        margin-top: 12mm !important;
+        padding-top: 2mm !important;
+      }
+
+      .footer {
+        padding-top: 3mm !important;
+        font-size: 9.5px !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .receipt-page.compact,
+      .receipt-page.dense {
+        padding: 6mm 8mm 5mm !important;
+      }
+
+      .receipt-page.dense .header {
+        margin-bottom: 3mm !important;
+        padding-bottom: 2.5mm !important;
+      }
+
+      .receipt-page.dense .info-grid {
+        margin-bottom: 3mm !important;
+      }
+
+      .receipt-page.dense .terms {
+        margin: 2.5mm 0 4mm !important;
+        font-size: 8.8px !important;
+      }
+
+      .receipt-page.dense .signatures {
+        margin-top: 5mm !important;
+        margin-bottom: 3mm !important;
+      }
+
+      .receipt-page.dense .signature-line {
+        margin-top: 8mm !important;
       }
     }
-  </style>
+
+</style>
 </head>
 <body>
 
@@ -894,6 +1156,12 @@
     return node;
   }
 
+
+  function autoResizeNoteEditor(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.max(64, textarea.scrollHeight) + 'px';
+  }
+
   function makeInput(value, readonly = false) {
     const input = document.createElement('input');
     input.type = 'text';
@@ -915,6 +1183,12 @@
   function buildReceipt(customer, index) {
     const receipt = el('section', 'receipt-page');
     receipt.dataset.index = index;
+
+    if (customer.products.length >= 9) {
+      receipt.classList.add('dense');
+    } else if (customer.products.length >= 6) {
+      receipt.classList.add('compact');
+    }
 
     const header = el('div', 'header');
 
@@ -969,9 +1243,24 @@
     const tbody = document.createElement('tbody');
     customer.products.forEach(product => {
       const tr = document.createElement('tr');
-      [product.qty, product.code, product.status, product.notes].forEach(value => {
-        tr.appendChild(el('td', '', String(value ?? '')));
+
+      tr.appendChild(el('td', '', String(product.qty ?? '')));
+      tr.appendChild(el('td', '', String(product.code ?? '')));
+      tr.appendChild(el('td', '', String(product.status ?? '')));
+
+      const notesTd = document.createElement('td');
+      const notesEditor = document.createElement('textarea');
+      notesEditor.className = 'notes-editor';
+      notesEditor.value = product.notes || '';
+      notesEditor.setAttribute('aria-label', 'ملاحظات المنتج / التوصيل');
+      notesEditor.addEventListener('input', () => {
+        product.notes = notesEditor.value;
+        autoResizeNoteEditor(notesEditor);
       });
+      notesTd.appendChild(notesEditor);
+      requestAnimationFrame(() => autoResizeNoteEditor(notesEditor));
+      tr.appendChild(notesTd);
+
       tbody.appendChild(tr);
     });
     table.appendChild(tbody);
@@ -1181,6 +1470,10 @@
   document.getElementById('printAllBtn').addEventListener('click', printAllReceipts);
   document.getElementById('globalDriver').addEventListener('input', syncDriverToReceipts);
   document.getElementById('customerSearch').addEventListener('input', filterCustomers);
+
+  window.addEventListener('beforeprint', () => {
+    document.querySelectorAll('.notes-editor').forEach(autoResizeNoteEditor);
+  });
 </script>
 
 </body>
