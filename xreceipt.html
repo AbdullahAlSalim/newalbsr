@@ -893,6 +893,13 @@
     return '';
   }
 
+
+  function cleanStatusLabel(value) {
+    return normalize(value)
+      .replace(/^\s*\d+\s*[-–—]\s*/, '')
+      .trim();
+  }
+
   function bestStatus(row, indexes) {
     const candidates = indexes
       .map(i => normalize(row[i]))
@@ -915,7 +922,7 @@
       const m = value.match(/^\s*(\d+\s*-\s*.*?)(?=\s*\d+\s*-\s*|$)/);
       if (m) value = normalize(m[1]);
     }
-    return value;
+    return cleanStatusLabel(value);
   }
 
   function bestNotes(row, indexes) {
