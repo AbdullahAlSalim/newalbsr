@@ -517,6 +517,75 @@
 
     .receipt-tools.show { display: flex; }
 
+
+    .manual-product-panel {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto 14px;
+      background: #fff;
+      border: 1px solid #dfe5ea;
+      border-right: 5px solid var(--success-color);
+      border-radius: 9px;
+      padding: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.06);
+    }
+
+    .manual-product-panel.show { display: block; }
+
+    .manual-product-panel h3 {
+      margin: 0 0 12px;
+      color: var(--primary-color);
+      font-size: 17px;
+    }
+
+    .manual-product-grid {
+      display: grid;
+      grid-template-columns: 110px 1fr 1fr 2fr;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .manual-product-field label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--secondary-color);
+    }
+
+    .manual-product-field input,
+    .manual-product-field textarea {
+      width: 100%;
+      border: 1px solid #cfd6dc;
+      border-radius: 6px;
+      padding: 9px 10px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    .manual-product-field textarea {
+      min-height: 44px;
+      resize: vertical;
+    }
+
+    .manual-product-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .manual-product-message {
+      margin-top: 9px;
+      min-height: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .manual-product-message.ok { color: var(--success-color); }
+    .manual-product-message.error { color: var(--danger-color); }
+
     @media (max-width: 760px) {
       body { padding: 10px; }
       .upload-row, .info-grid { grid-template-columns: 1fr; }
@@ -536,6 +605,7 @@
       .company-info h1 { font-size: 21px; }
       .receipt-title h2 { font-size: 24px; }
       .products-table th, .products-table td { font-size: 11px; }
+      .manual-product-grid { grid-template-columns: 1fr; }
     }
 
     @page {
@@ -559,7 +629,8 @@
 
       .app-panel,
       .customers-wrap,
-      .receipt-tools {
+      .receipt-tools,
+      .manual-product-panel {
         display: none !important;
       }
 
@@ -844,8 +915,42 @@
 
   <div id="receiptTools" class="receipt-tools">
     <button class="btn btn-dark" type="button" onclick="printSelectedReceipt()">🖨️ طباعة الوصل الحالي</button>
+    <button class="btn btn-success" type="button" onclick="toggleManualProductPanel()">➕ إضافة منتج يدويًا</button>
     <button class="btn btn-secondary" type="button" onclick="showAllReceipts()">عرض جميع الوصولات</button>
   </div>
+
+  <section id="manualProductPanel" class="manual-product-panel">
+    <h3>إضافة منتج إلى الوصل الحالي</h3>
+
+    <div class="manual-product-grid">
+      <div class="manual-product-field">
+        <label for="manualQty">العدد</label>
+        <input id="manualQty" type="number" min="1" step="1" value="1">
+      </div>
+
+      <div class="manual-product-field">
+        <label for="manualCode">كود المنتج</label>
+        <input id="manualCode" type="text" placeholder="مثال: HOB-2592">
+      </div>
+
+      <div class="manual-product-field">
+        <label for="manualStatus">الحالة</label>
+        <input id="manualStatus" type="text" placeholder="مثال: المنتج جاهز للتسليم">
+      </div>
+
+      <div class="manual-product-field">
+        <label for="manualNotes">ملاحظات المنتج / التوصيل</label>
+        <textarea id="manualNotes" placeholder="اكتب الملاحظات إن وجدت..."></textarea>
+      </div>
+    </div>
+
+    <div class="manual-product-actions">
+      <button class="btn btn-success" type="button" onclick="addManualProduct()">✓ إضافة إلى الوصل</button>
+      <button class="btn btn-secondary" type="button" onclick="closeManualProductPanel()">إلغاء</button>
+    </div>
+
+    <div id="manualProductMessage" class="manual-product-message"></div>
+  </section>
 
   <main id="receiptsHost"></main>
 
@@ -1404,6 +1509,14 @@
     });
 
     document.getElementById('receiptTools').classList.add('show');
+
+    const manualPanel = document.getElementById('manualProductPanel');
+    if (manualPanel && manualPanel.classList.contains('show')) {
+      const message = document.getElementById('manualProductMessage');
+      message.className = 'manual-product-message';
+      message.textContent = `سيتم إضافة المنتج إلى وصل: ${state.groups[index].name}`;
+    }
+
     window.scrollTo({ top: document.getElementById('receiptsHost').offsetTop - 10, behavior: 'smooth' });
   }
 
@@ -1413,6 +1526,111 @@
     });
     document.querySelectorAll('.customer-item').forEach(node => node.classList.remove('active'));
   }
+
+
+  function toggleManualProductPanel() {
+    if (!state.groups.length) {
+      showStatus('قم بقراءة ملف Excel أولاً ثم اختر الزبون المطلوب.', 'warn');
+      return;
+    }
+
+    const panel = document.getElementById('manualProductPanel');
+    panel.classList.toggle('show');
+
+    if (panel.classList.contains('show')) {
+      const customer = state.groups[state.activeIndex];
+      const message = document.getElementById('manualProductMessage');
+      message.className = 'manual-product-message';
+      message.textContent = customer ? `سيتم إضافة المنتج إلى وصل: ${customer.name}` : '';
+      document.getElementById('manualCode').focus();
+    }
+  }
+
+  function closeManualProductPanel() {
+    document.getElementById('manualProductPanel').classList.remove('show');
+    const message = document.getElementById('manualProductMessage');
+    message.className = 'manual-product-message';
+    message.textContent = '';
+  }
+
+  function resetManualProductForm() {
+    document.getElementById('manualQty').value = '1';
+    document.getElementById('manualCode').value = '';
+    document.getElementById('manualStatus').value = '';
+    document.getElementById('manualNotes').value = '';
+  }
+
+  function mergeUniqueText(existingValue, newValue, separator) {
+    const existing = normalize(existingValue);
+    const incoming = normalize(newValue);
+
+    if (!incoming || incoming === '-') return existing;
+    if (!existing || existing === '-') return incoming;
+
+    const parts = existing.split(separator).map(v => normalize(v)).filter(Boolean);
+    if (!parts.includes(incoming)) parts.push(incoming);
+    return parts.join(separator);
+  }
+
+  function addManualProduct() {
+    const customer = state.groups[state.activeIndex];
+    const msg = document.getElementById('manualProductMessage');
+
+    if (!customer) {
+      msg.className = 'manual-product-message error';
+      msg.textContent = 'لم يتم تحديد زبون لإضافة المنتج إليه.';
+      return;
+    }
+
+    const qty = Math.max(1, parseInt(document.getElementById('manualQty').value, 10) || 1);
+    const code = normalize(document.getElementById('manualCode').value);
+    const status = cleanStatusLabel(document.getElementById('manualStatus').value);
+    const notes = normalize(document.getElementById('manualNotes').value);
+
+    if (!code) {
+      msg.className = 'manual-product-message error';
+      msg.textContent = 'يرجى إدخال كود المنتج.';
+      document.getElementById('manualCode').focus();
+      return;
+    }
+
+    const existing = customer.products.find(
+      p => normalize(p.code).toLowerCase() === code.toLowerCase()
+    );
+
+    if (existing) {
+      existing.qty = Number(existing.qty || 0) + qty;
+      existing.status = mergeUniqueText(existing.status, status, ' / ');
+      existing.notes = mergeUniqueText(existing.notes, notes, ' | ');
+    } else {
+      customer.products.push({
+        qty,
+        code,
+        status,
+        notes,
+        serial: '',
+        sourceRow: null,
+        manual: true
+      });
+    }
+
+    state.totalRows += qty;
+
+    const activeIndex = state.activeIndex;
+    renderAllReceipts();
+    renderCustomerList();
+    setSummary();
+    showReceipt(activeIndex);
+
+    msg.className = 'manual-product-message ok';
+    msg.textContent = existing
+      ? `تمت إضافة العدد ${qty} إلى المنتج ${code} الموجود في الوصل.`
+      : `تمت إضافة المنتج ${code} إلى وصل ${customer.name} بنجاح.`;
+
+    resetManualProductForm();
+    document.getElementById('manualProductPanel').classList.add('show');
+  }
+
 
   function printSelectedReceipt() {
     const receipts = document.querySelectorAll('.receipt-page');
