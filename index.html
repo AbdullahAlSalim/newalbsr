@@ -542,34 +542,27 @@
 <script>
     document.getElementById('dateReg').valueAsDate = new Date();
 
-    // Auto-generate receipt number: 4 random digits + last 3 digits of phone number
-    let receiptRandomPrefix = '';
-
-    function getRandomFourDigits() {
-        return Math.floor(1000 + Math.random() * 9000).toString();
-    }
-
-    function updateReceiptNumber(forceNewPrefix = false) {
+    // Auto-generate receipt number: YYYYMMDD + last 3 digits of phone number
+    function updateReceiptNumber() {
         const phoneInput = document.getElementById('phone');
+        const dateInput = document.getElementById('dateReg');
         const refInput = document.getElementById('refNo');
-        const phoneDigits = phoneInput.value.replace(/\D/g, '');
 
-        if (phoneDigits.length < 3) {
+        const phoneDigits = phoneInput.value.replace(/\D/g, '');
+        const dateValue = dateInput.value;
+
+        if (phoneDigits.length < 3 || !dateValue) {
             refInput.value = '';
             return;
         }
 
-        if (!receiptRandomPrefix || forceNewPrefix) {
-            receiptRandomPrefix = getRandomFourDigits();
-        }
-
+        const yyyymmdd = dateValue.replace(/-/g, '');
         const lastThreeDigits = phoneDigits.slice(-3);
-        refInput.value = receiptRandomPrefix + lastThreeDigits;
+        refInput.value = yyyymmdd + lastThreeDigits;
     }
 
-    document.getElementById('phone').addEventListener('input', function () {
-        updateReceiptNumber(false);
-    });
+    document.getElementById('phone').addEventListener('input', updateReceiptNumber);
+    document.getElementById('dateReg').addEventListener('change', updateReceiptNumber);
 
     // Bilingual warranty labels, keyed by the option's stored value code
     const warrantyLabels = {
@@ -793,9 +786,8 @@
 
         URL.revokeObjectURL(url);
 
-        // Prepare a fresh random prefix for the next receipt while keeping the phone-based suffix rule
-        receiptRandomPrefix = '';
-        updateReceiptNumber(true);
+        // Keep the receipt number synchronized with the selected date and phone number
+        updateReceiptNumber();
 
         alert('Exported successfully! / تم التصدير بنجاح!');
     }
