@@ -406,7 +406,7 @@
     <div class="form-grid">
         <div class="form-group">
             <label>Invoice / Receipt Number: <span class="ar">رقم الفاتورة / الوصل:</span></label>
-            <input type="text" id="refNo" value="1001">
+            <input type="text" id="refNo" value="" placeholder="Auto-generated / يتولد تلقائياً" readonly>
         </div>
 
         <div class="form-group">
@@ -541,6 +541,35 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
     document.getElementById('dateReg').valueAsDate = new Date();
+
+    // Auto-generate receipt number: 4 random digits + last 3 digits of phone number
+    let receiptRandomPrefix = '';
+
+    function getRandomFourDigits() {
+        return Math.floor(1000 + Math.random() * 9000).toString();
+    }
+
+    function updateReceiptNumber(forceNewPrefix = false) {
+        const phoneInput = document.getElementById('phone');
+        const refInput = document.getElementById('refNo');
+        const phoneDigits = phoneInput.value.replace(/\D/g, '');
+
+        if (phoneDigits.length < 3) {
+            refInput.value = '';
+            return;
+        }
+
+        if (!receiptRandomPrefix || forceNewPrefix) {
+            receiptRandomPrefix = getRandomFourDigits();
+        }
+
+        const lastThreeDigits = phoneDigits.slice(-3);
+        refInput.value = receiptRandomPrefix + lastThreeDigits;
+    }
+
+    document.getElementById('phone').addEventListener('input', function () {
+        updateReceiptNumber(false);
+    });
 
     // Bilingual warranty labels, keyed by the option's stored value code
     const warrantyLabels = {
@@ -764,10 +793,9 @@
 
         URL.revokeObjectURL(url);
 
-        const currentRef = parseInt(refNo);
-        if (!isNaN(currentRef)) {
-            document.getElementById('refNo').value = currentRef + 1;
-        }
+        // Prepare a fresh random prefix for the next receipt while keeping the phone-based suffix rule
+        receiptRandomPrefix = '';
+        updateReceiptNumber(true);
 
         alert('Exported successfully! / تم التصدير بنجاح!');
     }
