@@ -190,11 +190,50 @@
       color: var(--primary-color);
     }
 
-    #customerSearch {
-      width: min(100%, 360px);
+    .customer-controls {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      flex: 1 1 520px;
+      justify-content: flex-end;
+    }
+
+    #customerSearch,
+    #customerSort {
       padding: 9px 12px;
       border: 1px solid #cfd6dc;
       border-radius: 6px;
+      background: #fff;
+      min-height: 44px;
+      font-size: 13px;
+      color: var(--primary-color);
+    }
+
+    #customerSearch { width: min(100%, 315px); }
+    #customerSort { width: min(100%, 255px); cursor: pointer; }
+
+    #customerSearch:focus,
+    #customerSort:focus {
+      outline: 2px solid rgba(52, 152, 219, .25);
+      border-color: var(--accent-color);
+    }
+
+    .customer-sort-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--secondary-color);
+      white-space: nowrap;
+    }
+
+    .customer-count {
+      display: inline-block;
+      background: #e9f4fc;
+      color: #21699c;
+      border-radius: 5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      margin-inline-start: 5px;
     }
 
     .customers-list {
@@ -591,6 +630,9 @@
       .upload-row, .info-grid { grid-template-columns: 1fr; }
       .summary-grid { grid-template-columns: repeat(2, 1fr); }
       .customers-list { grid-template-columns: 1fr; }
+      .customer-controls { flex: 1 1 100%; justify-content: stretch; }
+      #customerSearch { width: 100%; }
+      #customerSort { flex: 1 1 190px; width: auto; }
       .receipt-page { padding: 18px; }
       .header { align-items: flex-start; }
       .header-logo {
@@ -908,7 +950,16 @@
   <section id="customersWrap" class="customers-wrap">
     <div class="customers-header">
       <h3>الزبائن والوصولات</h3>
-      <input id="customerSearch" type="text" placeholder="بحث بالاسم أو رقم الهاتف أو العنوان...">
+      <div class="customer-controls">
+        <input id="customerSearch" type="search" aria-label="بحث عن زبون" placeholder="بحث بالاسم أو رقم الهاتف أو العنوان...">
+        <label class="customer-sort-label" for="customerSort">ترتيب الزبائن:</label>
+        <select id="customerSort" aria-label="فرز الزبائن والوصولات">
+          <option value="products-desc" selected>الأكثر منتجات أولاً</option>
+          <option value="products-asc">الأقل منتجات أولاً</option>
+          <option value="name-asc">الاسم: أ - ي</option>
+          <option value="name-desc">الاسم: ي - أ</option>
+        </select>
+      </div>
     </div>
     <div id="customersList" class="customers-list"></div>
   </section>
@@ -959,7 +1010,8 @@
     groups: [],
     activeIndex: 0,
     selectedSheetName: '',
-    totalRows: 0
+    totalRows: 0,
+    sortMode: 'products-desc'
   };
 
   const aliases = {
@@ -1464,12 +1516,47 @@
     return receipt;
   }
 
+  // العدد يعتمد على مجموع الكميات، لا على عدد الموديلات المختلفة.
+  function customerProductCount(customer) {
+    return customer.products.reduce((sum, product) => sum + Number(product.qty || 0), 0);
+  }
+
+  function sortedCustomerIndices() {
+    const mode = state.sortMode;
+    return state.groups.map((_, index) => index).sort((a, b) => {
+      const first = state.groups[a];
+      const second = state.groups[b];
+      const nameOrder = first.name.localeCompare(second.name, 'ar');
+
+      if (mode === 'name-asc') return nameOrder || a - b;
+      if (mode === 'name-desc') return -nameOrder || a - b;
+
+      const difference = customerProductCount(first) - customerProductCount(second);
+      if (difference) return mode === 'products-asc' ? difference : -difference;
+      return nameOrder || a - b;
+    });
+  }
+
+  // نقل العناصر الموجودة بدلاً من إعادة بنائها يحافظ على أي تعديلات داخل الوصولات.
+  function applyCustomerSort() {
+    const order = sortedCustomerIndices();
+    const customersList = document.getElementById('customersList');
+    const receiptsHost = document.getElementById('receiptsHost');
+    const listNodes = new Map(Array.from(customersList.children, node => [Number(node.dataset.index), node]));
+    const receiptNodes = new Map(Array.from(receiptsHost.children, node => [Number(node.dataset.index), node]));
+
+    order.forEach(index => {
+      if (listNodes.has(index)) customersList.appendChild(listNodes.get(index));
+      if (receiptNodes.has(index)) receiptsHost.appendChild(receiptNodes.get(index));
+    });
+  }
+
   function renderAllReceipts() {
     const host = document.getElementById('receiptsHost');
     host.innerHTML = '';
 
-    state.groups.forEach((customer, index) => {
-      host.appendChild(buildReceipt(customer, index));
+    sortedCustomerIndices().forEach(index => {
+      host.appendChild(buildReceipt(state.groups[index], index));
     });
 
     syncDriverToReceipts();
@@ -1479,33 +1566,34 @@
     const list = document.getElementById('customersList');
     list.innerHTML = '';
 
-    state.groups.forEach((customer, index) => {
+    sortedCustomerIndices().forEach(index => {
+      const customer = state.groups[index];
       const item = el('div', 'customer-item');
       item.dataset.index = index;
 
       const name = el('div', 'name', customer.name);
-      const productCount = customer.products.reduce((sum, p) => sum + Number(p.qty || 0), 0);
-      const meta = el(
-        'div',
-        'meta',
-        `${customer.phone || 'بدون هاتف'} • ${productCount} منتج${customer.address ? ' • ' + customer.address : ''}`
-      );
+      const meta = el('div', 'meta');
+      meta.appendChild(el('span', '', customer.phone || 'بدون هاتف'));
+      meta.appendChild(el('span', 'customer-count', `${customerProductCount(customer)} منتج`));
+      if (customer.address) meta.appendChild(el('span', '', ` • ${customer.address}`));
 
       item.append(name, meta);
       item.addEventListener('click', () => showReceipt(index));
       list.appendChild(item);
     });
+
+    filterCustomers();
   }
 
   function showReceipt(index) {
     state.activeIndex = index;
-    document.querySelectorAll('.receipt-page').forEach((node, i) => {
-      node.classList.toggle('hidden', i !== index);
+    document.querySelectorAll('.receipt-page').forEach(node => {
+      node.classList.toggle('hidden', Number(node.dataset.index) !== index);
       node.classList.remove('print-target');
     });
 
-    document.querySelectorAll('.customer-item').forEach((node, i) => {
-      node.classList.toggle('active', i === index);
+    document.querySelectorAll('.customer-item').forEach(node => {
+      node.classList.toggle('active', Number(node.dataset.index) === index);
     });
 
     document.getElementById('receiptTools').classList.add('show');
@@ -1634,8 +1722,8 @@
 
   function printSelectedReceipt() {
     const receipts = document.querySelectorAll('.receipt-page');
-    receipts.forEach((node, i) => {
-      node.classList.toggle('print-target', i === state.activeIndex);
+    receipts.forEach(node => {
+      node.classList.toggle('print-target', Number(node.dataset.index) === state.activeIndex);
     });
 
     document.body.classList.add('print-selected');
@@ -1734,8 +1822,9 @@
   function filterCustomers() {
     const q = normalize(document.getElementById('customerSearch').value).toLowerCase();
 
-    document.querySelectorAll('.customer-item').forEach((item, index) => {
-      const customer = state.groups[index];
+    document.querySelectorAll('.customer-item').forEach(item => {
+      const customer = state.groups[Number(item.dataset.index)];
+      if (!customer) return;
       const haystack = `${customer.name} ${customer.phone} ${customer.address}`.toLowerCase();
       item.style.display = !q || haystack.includes(q) ? '' : 'none';
     });
@@ -1746,6 +1835,10 @@
   document.getElementById('printAllBtn').addEventListener('click', printAllReceipts);
   document.getElementById('globalDriver').addEventListener('input', syncDriverToReceipts);
   document.getElementById('customerSearch').addEventListener('input', filterCustomers);
+  document.getElementById('customerSort').addEventListener('change', event => {
+    state.sortMode = event.target.value;
+    applyCustomerSort();
+  });
 
   window.addEventListener('beforeprint', () => {
     document.querySelectorAll('.notes-editor').forEach(autoResizeNoteEditor);
