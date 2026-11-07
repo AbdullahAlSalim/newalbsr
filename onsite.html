@@ -31,6 +31,7 @@
   input,select,textarea{width:100%;min-height:33px;border:0;border-bottom:1.5px solid #9bafc0;border-radius:0;background:#fbfdfe;padding:4px 6px;color:#142f42;box-shadow:none}
   input::placeholder,textarea::placeholder{color:#a2afbb}
   select{appearance:auto;cursor:pointer}
+  input[readonly]{font-weight:800;color:var(--navy);background:#eaf3f9;cursor:default}
   textarea{resize:none;height:51px;overflow:hidden}
   .hand{margin-top:21px}
   .hand-notice{font-size:12px;color:#556c7d;background:#f5f8fb;padding:8px 10px;margin:-2px 0 13px;border-radius:5px}
@@ -44,9 +45,10 @@
   .single-lines{display:flex;flex-direction:column;gap:22px;margin:11px 0 18px}
   .caption{font-size:12px;font-weight:700;color:#475e70;margin:0}
   .single-line{height:1px;border-bottom:1px solid #839bad}
-  .completion{display:flex;gap:24px;flex-wrap:wrap;align-items:center;margin:11px 0 22px}
-  .completion label{font-size:12px;white-space:nowrap;display:flex;align-items:center;gap:6px}
-  .small-square{display:inline-block;height:13px;width:13px;border:1.4px solid #55748c;border-radius:1px}
+  .stages{display:flex;flex-direction:column;gap:4px;margin:5px 0 12px}
+  .stage{display:flex;align-items:flex-end;gap:10px;min-height:33px;break-inside:avoid}
+  .stage-number{flex:0 0 21px;font-weight:800;font-size:12px;color:var(--navy);text-align:center;line-height:30px}
+  .stage-write{display:block;flex:1;height:29px;border-bottom:1px solid #839bad}
   .signatures{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:6px}
   .signature{font-size:12px;text-align:center;font-weight:700;color:#41596c;padding-top:35px;border-bottom:1px solid #839bad;height:61px}
   .bottom{margin-top:auto;padding-top:18px;color:#627586;font-size:10.5px;text-align:center}
@@ -69,7 +71,8 @@
     .field.mob-full{grid-column:span 2}
     .hand-row{grid-template-columns:1fr}
     .signatures{gap:15px}
-    .completion{gap:8px 14px}
+    .stages{gap:3px}
+    .stage{min-height:31px}
   }
   @page{size:A4 portrait;margin:0}
   @media print{
@@ -81,7 +84,11 @@
     input::placeholder,textarea::placeholder{color:transparent !important}
     select{appearance:none !important;-webkit-appearance:none !important;background-image:none !important}
     .hand,.hand-row,.signatures{break-inside:avoid}
-    .hand-notice{background:#f5f8fb !important}
+    .helper,.hand-notice{display:none !important}
+    .hand{margin-top:16px !important}
+    .hand-row{margin-bottom:11px !important}
+    .single-lines{gap:18px;margin:8px 0 13px !important}
+    .signatures{margin-top:2px !important}
   }
 </style>
 </head>
@@ -110,7 +117,8 @@
       <div class="field"><label for="model">موديل الجهاز</label><input id="model" placeholder="الموديل"></div>
       <div class="field"><label for="serial">الرقم التسلسلي</label><input id="serial" placeholder="Serial No." dir="ltr"></div>
       <div class="field"><label for="warranty">نوع الضمان</label><select id="warranty"><option value="">اختر الضمان</option><option>ضمن الضمان</option><option>خارج الضمان</option></select></div>
-      <div class="field"><label for="ticket">رقم طلب الصيانة (اختياري)</label><input id="ticket" placeholder="رقم الطلب" dir="ltr"></div>
+      <div class="field"><label for="formDate">تاريخ الفورم</label><input id="formDate" type="date" dir="ltr" aria-label="تاريخ الفورم"></div>
+      <div class="field"><label for="ticket">رقم طلب الصيانة (تلقائي)</label><input id="ticket" dir="ltr" readonly placeholder="يتولد تلقائياً" title="التاريخ بصيغة YYYYMMDD ثم آخر 4 أرقام من الهاتف"></div>
       <div class="field full"><label for="fault">العطل المبلّغ عنه (اختياري)</label><input id="fault" placeholder="وصف مختصر للعطل"></div>
     </div>
   </section>
@@ -135,11 +143,13 @@
     </div>
     <p class="caption">الأعمال المنفذة وقطع الغيار المستخدمة:</p>
     <div class="single-lines"><div class="single-line"></div><div class="single-line"></div><div class="single-line"></div></div>
-    <p class="caption">نتيجة الزيارة:</p>
-    <div class="completion">
-      <label><i class="small-square"></i> تم التصليح</label>
-      <label><i class="small-square"></i> يحتاج إلى متابعة</label>
-      <label><i class="small-square"></i> لم يتم التصليح</label>
+    <p class="caption">نتيجة الزيارة (مراحل التصليح):</p>
+    <div class="stages" aria-label="خمس مراحل فارغة يُدوّنها الفني بخط اليد">
+      <div class="stage"><span class="stage-number">١.</span><span class="stage-write"></span></div>
+      <div class="stage"><span class="stage-number">٢.</span><span class="stage-write"></span></div>
+      <div class="stage"><span class="stage-number">٣.</span><span class="stage-write"></span></div>
+      <div class="stage"><span class="stage-number">٤.</span><span class="stage-write"></span></div>
+      <div class="stage"><span class="stage-number">٥.</span><span class="stage-write"></span></div>
     </div>
     <div class="signatures">
       <div class="signature">اسم وتوقيع الفني</div>
@@ -149,10 +159,45 @@
   <footer class="bottom"><strong>NEWAL</strong> — يرجى الاحتفاظ بهذا الوصل للرجوع إليه عند الحاجة.</footer>
 </main>
 <script>
-  document.getElementById('clearBtn').addEventListener('click',function(){
+  const phoneInput = document.getElementById('phone');
+  const formDateInput = document.getElementById('formDate');
+  const ticketInput = document.getElementById('ticket');
+
+  // يُستخدم التاريخ المحلي للجهاز، وليس توقيت UTC.
+  function todayLocal() {
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  }
+
+  // يدعم الأرقام الإنجليزية والعربية المستخدمة في العراق.
+  function onlyDigits(value) {
+    return value.replace(/[٠-٩۰-۹]/g, ch => {
+      const cp = ch.charCodeAt(0);
+      return String(cp >= 0x6F0 ? cp - 0x6F0 : cp - 0x660);
+    }).replace(/\D/g, '');
+  }
+
+  function updateTicket() {
+    const date = formDateInput.value;
+    const phone = onlyDigits(phoneInput.value);
+    ticketInput.value = /^\d{4}-\d{2}-\d{2}$/.test(date) && phone.length >= 4
+      ? date.replace(/-/g, '') + phone.slice(-4)
+      : '';
+  }
+
+  formDateInput.value = todayLocal();
+  phoneInput.addEventListener('input', updateTicket);
+  formDateInput.addEventListener('input', updateTicket);
+  formDateInput.addEventListener('change', updateTicket);
+  updateTicket();
+
+  document.getElementById('clearBtn').addEventListener('click', function(){
     if (!confirm('هل تريد مسح جميع البيانات المدخلة؟')) return;
-    document.querySelectorAll('main input').forEach(el=>el.value='');
-    document.querySelectorAll('main select').forEach(el=>el.selectedIndex=0);
+    document.querySelectorAll('main input:not([readonly])').forEach(el => el.value = '');
+    document.querySelectorAll('main select').forEach(el => el.selectedIndex = 0);
+    formDateInput.value = todayLocal();
+    updateTicket();
   });
 </script>
 </body>
